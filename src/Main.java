@@ -8,7 +8,7 @@ import logic.factories.TowerFactory;
 import utils.GameConfiguration;
 import ai.algorithms.AnytimeAlgorithm;
 import ai.algorithms.BeamSearchPrioriryQueue;
-import ai.algorithms.heuristics.BonusHeuristic;
+import ai.algorithms.heuristics.LevelsHeuristic;
 import ai.algorithms.heuristics.Heuristic;
 import ai.algorithms.heuristics.PathHeuristic;
 import ai.algorithms.heuristics.WeightedHeuristics;
@@ -39,8 +39,8 @@ public class Main {
 				beamSize, runningTime);
 
 		// Heuristic function
-		Heuristic bonus = new BonusHeuristic(server);
-		Heuristic path = new PathHeuristic(server);
+		Heuristic bonus = new LevelsHeuristic();
+		Heuristic path = new PathHeuristic();
 		Heuristic h = new WeightedHeuristics(server, path, bonus, alpha);
 
 		ResultsWriter text_viewer = new ResultsWriter(description, runningTime,
