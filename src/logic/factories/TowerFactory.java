@@ -19,11 +19,11 @@ public class TowerFactory {
 	}
 
 	public void configureFactory(int firing_speed, double initial_damage,
-			int tower_range, int tower_bonus) {
+			int tower_range, int levelUpBonus) {
 		configured = true;
 		speed = firing_speed;
 		initialDamage = initial_damage;
 		range = tower_range;
-		bonus = tower_bonus;
+		bonus = levelUpBonus;
 	}
 }

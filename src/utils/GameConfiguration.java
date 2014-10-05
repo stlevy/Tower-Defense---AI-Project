@@ -22,7 +22,7 @@ public class GameConfiguration {
 		towerRange = Integer.parseInt(towerSect.get("towerRange"));
 		firingSpeed= Integer.parseInt(towerSect.get("firingSpeed")) / speedFactor;
 		initialDamage = Double.parseDouble(towerSect.get("initialDamage"));
-		damagePrecentageBonus = Integer.parseInt(towerSect.get("damagePrecentageBonus"));
+		levelUpBonus = Integer.parseInt(towerSect.get("levelUpBonus"));
 	
 		Section spawnerSect = confFile.get("Spawner");
 		spawnTime = Integer.parseInt(spawnerSect.get("spawnTime")) / speedFactor;
@@ -55,7 +55,7 @@ public class GameConfiguration {
 	public final int towerRange;
 	public final int firingSpeed; // bigger -> slower
 	public final double initialDamage;
-	public final int damagePrecentageBonus;
+	public final int levelUpBonus;
 
 
 	// Spawner

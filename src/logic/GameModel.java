@@ -56,7 +56,7 @@ public class GameModel implements Game {
 		mobFactory.configureFactory(conf.mobHealth, conf.mobSpeed,
 				conf.blockSize);
 		towerFactory.configureFactory(conf.firingSpeed, conf.initialDamage,
-				conf.towerRange, conf.damagePrecentageBonus);
+				conf.towerRange, conf.levelUpBonus);
 	}
 
 	private void initializeTowers(int level, int gameWidth, int gameHeight) {
@@ -118,7 +118,7 @@ public class GameModel implements Game {
 		Tower newTower = towerFactory.create(room.blockGetRect(roomCoord));
 		towers.add(newTower);
 		room.blockSetTower(roomCoord, newTower);
-		updateTowerBonuses(roomCoord, newTower);
+		updateNeighborTowers(roomCoord, newTower);
 	}
 
 	public boolean towerSeesPath(Point towerCoord) {
@@ -137,7 +137,7 @@ public class GameModel implements Game {
 		return seesPath;
 	}
 
-	private void updateTowerBonuses(Point roomCoord, Tower tower) {
+	private void updateNeighborTowers(Point roomCoord, Tower tower) {
 		for (int deltaX = -1; deltaX < 2; deltaX++) {
 			for (int deltaY = -1; deltaY < 2; deltaY++) {
 				if (deltaX == 0 && deltaY == 0)
@@ -145,11 +145,10 @@ public class GameModel implements Game {
 				Point neighbor = new Point(roomCoord.x + deltaX, roomCoord.y
 						+ deltaY);
 				if (pointInRoom(neighbor) && hasTower(neighbor)) {
-					room.blockGetTower(neighbor).addNeighborTower(); // add
-																		// bonus
-																		// to
-																		// neighbor
-					tower.addNeighborTower(); // add bonus to self
+					// level the neighbor up
+					room.blockGetTower(neighbor).levelUp();
+					// level self up
+					tower.levelUp(); 
 				}
 			}
 		}
@@ -209,7 +208,7 @@ public class GameModel implements Game {
 
 	@Override
 	public boolean isOver() {
-		return health == 0 || killedMobs + passedMobs == conf.numberOfMobs;
+		return health == 0 || (killedMobs + passedMobs == conf.numberOfMobs);
 	}
 
 	@Override
