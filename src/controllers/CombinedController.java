@@ -39,7 +39,6 @@ public class CombinedController implements Runnable {
 		writer = _writer;
 		h = _h;
 		conf = game.getConfiguration();
-		currentHeuristicValue = 0.0;
 		gui_viewer = new GameViewer(conf);
 	}
 
@@ -111,6 +110,7 @@ public class CombinedController implements Runnable {
 	}
 
 	private void startLevel() {
+		currentHeuristicValue = 0.0;
 		game.initializeLevel(level, GUIUtils.frameSize.width,
 				GUIUtils.frameSize.height - 20);
 
