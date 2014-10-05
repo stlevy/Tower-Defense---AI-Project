@@ -6,7 +6,7 @@ import java.util.List;
 import utils.GameConfiguration;
 import utils.GameUtils.TILE_TYPE;
 
-public interface Game {
+public interface Game extends Iterable<Point>{
 
 	public abstract void initializeLevel(int level, int gameWidth,
 			int gameHeight);
