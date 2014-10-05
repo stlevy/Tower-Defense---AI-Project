@@ -10,7 +10,7 @@ import ai.algorithms.nodes.AbstractState;
  * @author Tomer
  * 
  */
-public class WeightedHeuristics extends Heuristic {
+public class WeightedHeuristics implements Heuristic {
 
 	Heuristic h1;
 	Heuristic h2;
@@ -18,11 +18,6 @@ public class WeightedHeuristics extends Heuristic {
 
 	public WeightedHeuristics(Game _game, Heuristic h1, Heuristic h2,
 			double alpha) {
-		super(_game);
-
-		if (h1.game != h2.game || h1.game != _game)
-			throw new IllegalArgumentException(
-					"all heuristics must work on the same game");
 		if (alpha > 1 || alpha < 0)
 			throw new IllegalArgumentException("Alpha must be in [0,1]");
 		this.h1 = h1;
@@ -32,9 +27,9 @@ public class WeightedHeuristics extends Heuristic {
 	}
 
 	@Override
-	public double getHeuristicValue(AbstractState node) {
-		double value1 = h1.getHeuristicValue(node);
-		double value2 = h2.getHeuristicValue(node);
+	public double getHeuristicValue(AbstractState node,Game game) {
+		double value1 = h1.getHeuristicValue(node,game);
+		double value2 = h2.getHeuristicValue(node,game);
 		return alpha * value1 + (1 - alpha) * value2;
 	}
 
