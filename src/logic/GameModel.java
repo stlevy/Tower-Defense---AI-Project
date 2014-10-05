@@ -31,7 +31,8 @@ public class GameModel implements Game {
 
 	private GameConfiguration conf;
 
-	public GameModel(MobFactory mFact, TowerFactory tFact,GameConfiguration conf) throws IOException {
+	public GameModel(MobFactory mFact, TowerFactory tFact,
+			GameConfiguration conf) throws IOException {
 		mobFactory = mFact;
 		towerFactory = tFact;
 		this.conf = conf;
@@ -51,9 +52,10 @@ public class GameModel implements Game {
 	}
 
 	private void configureFactories() {
-		mobFactory.configureFactory(conf.mobHealth, conf.mobSpeed,conf.blockSize);
-		towerFactory.configureFactory(conf.firingSpeed,
-				conf.initialDamage);
+		mobFactory.configureFactory(conf.mobHealth, conf.mobSpeed,
+				conf.blockSize);
+		towerFactory.configureFactory(conf.firingSpeed, conf.initialDamage,
+				conf.towerRange, conf.damagePrecentageBonus);
 	}
 
 	private void initializeTowers(int level, int gameWidth, int gameHeight) {
@@ -61,14 +63,12 @@ public class GameModel implements Game {
 	}
 
 	private void initializeRoom(int level, int gameWidth, int gameHeight) {
-		int initialX = (gameWidth / 2)
-				- (conf.roomWidth * conf.blockSize / 2);
+		int initialX = (gameWidth / 2) - (conf.roomWidth * conf.blockSize / 2);
 		int initialY = (gameHeight / 2)
 				- (conf.roomHeight * conf.blockSize / 2);
 		initialRoomPoint = new Point(initialX, initialY);
-		room = new Room(conf.roomWidth, conf.roomHeight,
-				conf.blockSize, initialRoomPoint, new File("Levels/level"
-						+ level + ".txt"));
+		room = new Room(conf.roomWidth, conf.roomHeight, conf.blockSize,
+				initialRoomPoint, new File("Levels/level" + level + ".txt"));
 		roomEntryPoint = room.getEntryPoint();
 
 	}
@@ -114,21 +114,21 @@ public class GameModel implements Game {
 			throw new IllegalStateException("can't build there"
 					+ roomCoord.toString());
 		money -= conf.prices[itemHolds];
-		Tower newTower = towerFactory.create(room.blockGetRect(roomCoord),
-				conf.towerRange);
+		Tower newTower = towerFactory.create(room.blockGetRect(roomCoord));
 		towers.add(newTower);
 		room.blockSetTower(roomCoord, newTower);
 		updateTowerBonuses(roomCoord, newTower);
 	}
 
 	public boolean towerSeesPath(Point towerCoord) {
-		boolean seesPath= false;
+		boolean seesPath = false;
 		for (int deltaX = -1; deltaX < 2; deltaX++) {
 			for (int deltaY = -1; deltaY < 2; deltaY++) {
 				if (deltaX == 0 && deltaY == 0)
 					continue;
-				
-				Point neighbor = new Point(towerCoord.x + deltaX, towerCoord.y + deltaY);
+
+				Point neighbor = new Point(towerCoord.x + deltaX, towerCoord.y
+						+ deltaY);
 				if (getBlockType(neighbor) == TILE_TYPE.PATH)
 					seesPath = true;
 			}
@@ -137,7 +137,6 @@ public class GameModel implements Game {
 	}
 
 	private void updateTowerBonuses(Point roomCoord, Tower tower) {
-		int neighborTowers = 0;
 		for (int deltaX = -1; deltaX < 2; deltaX++) {
 			for (int deltaY = -1; deltaY < 2; deltaY++) {
 				if (deltaX == 0 && deltaY == 0)
@@ -145,15 +144,13 @@ public class GameModel implements Game {
 				Point neighbor = new Point(roomCoord.x + deltaX, roomCoord.y
 						+ deltaY);
 				if (pointInRoom(neighbor) && hasTower(neighbor)) {
-					neighborTowers++;
-					Tower neighborTower = room.blockGetTower(neighbor);
-					neighborTower
-							.addDamageBonus(conf.damagePrecentageBonus);
+					room.blockGetTower(neighbor).addNeighborTower(); // add
+																		// bonus
+																		// to
+																		// neighbor
+					tower.addNeighborTower(); // add bonus to self
 				}
 			}
-		}
-		for (int i = 0; i < neighborTowers; i++) {
-			tower.addDamageBonus(conf.damagePrecentageBonus);
 		}
 	}
 

@@ -33,10 +33,21 @@ public class GUIUtils {
 	public final static Image tile_mob = new ImageIcon("resources/mob_1.png").getImage();
 
 	public final static Image[] tile_shop = {
-		new ImageIcon("resources/tower1.png").getImage(),
+		new ImageIcon("resources/tower0.png").getImage(),
 		new ImageIcon("resources/trash.png").getImage()
 	};
 
+	public final static Image[] towers = {
+		new ImageIcon("resources/tower0.png").getImage(),
+		new ImageIcon("resources/tower1.png").getImage(),
+		new ImageIcon("resources/tower2.png").getImage(),
+		new ImageIcon("resources/tower3.png").getImage(),
+		new ImageIcon("resources/tower4.png").getImage(),
+		new ImageIcon("resources/tower5.png").getImage(),
+		new ImageIcon("resources/tower6.png").getImage(),
+		new ImageIcon("resources/tower7.png").getImage(),
+		new ImageIcon("resources/tower8.png").getImage()
+	};
 	
 	//Store viewer constants
 	

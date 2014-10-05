@@ -12,10 +12,11 @@ public class Tower extends Rectangle {
 
 	private double initialDamage;
 
-	private int bonusPrecentage;
+	private int neighborTowers;
+	private final int bonusPrecentage;
 
 	public Tower(Rectangle containing, int range, int firing_speed,
-			double initial_damage) {
+			double initial_damage,int bonus) {
 
 		setBounds(containing.x, containing.y, containing.width,
 				containing.height);
@@ -23,7 +24,8 @@ public class Tower extends Rectangle {
 				containing.width + range, containing.height + range);
 		firingFrame = new TimeFrame(firing_speed);
 		initialDamage = initial_damage;
-		bonusPrecentage = 0;
+		bonusPrecentage = bonus;
+		neighborTowers = 0;
 	}
 
 	/**
@@ -98,11 +100,15 @@ public class Tower extends Rectangle {
 		return (Rectangle) aimedMob.clone();
 	}
 
-	public void addDamageBonus(int precentage) {
-		bonusPrecentage += precentage;
+	public void addNeighborTower(){
+		neighborTowers ++;
 	}
-
+	
+	public int getNeighborTowers(){
+		return neighborTowers;
+	}
+	
 	private double calculateDamage() {
-		return initialDamage + initialDamage * bonusPrecentage / 100.0;
+		return initialDamage + initialDamage * (bonusPrecentage * neighborTowers / 100.0);
 	}
 }

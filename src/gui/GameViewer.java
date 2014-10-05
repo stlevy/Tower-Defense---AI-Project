@@ -75,7 +75,7 @@ public class GameViewer extends JPanel {
 	private void drawTowers(Graphics g) {
 		for (Tower tower : towers) {
 			TowerViewer.draw(g, tower, tower.getRange(), tower.isAiming(),
-					tower.getAimedMob());
+					tower.getAimedMob(),tower.getNeighborTowers());
 		}
 	}
 
