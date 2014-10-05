@@ -5,24 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import logic.Game;
 import ai.algorithms.heuristics.Heuristic;
 
 public class BoardState extends AbstractState {
 
-	private final int boardHeight, boardWidth;
 	private final List<Point> towerCoordinates;
 
-	public BoardState(List<Point> points, int boardWidth, int boardHeight,
-			Heuristic h) {
-		super(h);
-		this.boardHeight = boardHeight;
-		this.boardWidth = boardWidth;
+	public BoardState(List<Point> points, Heuristic h,Game game) {
+		super(h,game);
 		towerCoordinates = new ArrayList<>(points);
 	}
 
 	private BoardState(BoardState board) {
-		this(board.getTowerCoordinates(), board.boardWidth, board.boardHeight,
-				board.h);
+		this(board.getTowerCoordinates(), board.h,board.game);
 	}
 
 	@Override
@@ -30,23 +26,17 @@ public class BoardState extends AbstractState {
 		Vector<BoardState> sons = new Vector<>();
 		BoardState temp = new BoardState(this);
 		for (int pointIdx = 0; pointIdx < towerCoordinates.size(); pointIdx++) {
-			for (int x = 0; x < boardWidth; x++) {
-				for (int y = 0; y < boardHeight; y++) {
+			for (Point p : game){ 
+				if (towerCoordinates.contains(p))
+					continue; // already a tower in this location
 
-					Point newLocation = new Point(x, y);
-
-					if (towerCoordinates.contains(newLocation))
-						continue; // already a tower in this location
-
-					temp.towerCoordinates.set(pointIdx, newLocation);
-					sons.add(new BoardState(temp));
-				}
+				temp.towerCoordinates.set(pointIdx,p);
+				sons.add(new BoardState(temp));				
 			}
 			// return the tower to it's original place
 			temp.towerCoordinates.set(pointIdx, towerCoordinates.get(pointIdx));
 		}
 		return sons;
-
 	}
 
 	@Override
@@ -73,8 +63,7 @@ public class BoardState extends AbstractState {
 			return false;
 		BoardState node = (BoardState) other;
 		return towerCoordinates.containsAll(node.towerCoordinates)
-				&& node.towerCoordinates
-						.containsAll(towerCoordinates);
+				&& node.towerCoordinates.containsAll(towerCoordinates);
 
 	}
 
