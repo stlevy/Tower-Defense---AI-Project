@@ -40,12 +40,12 @@ public class StoreViewer extends Rectangle {
 	public void draw(Graphics g, int money, int health) {
 		g.setFont(new Font("Ariel", Font.BOLD, GUIUtils.fontSize));
 
-		for (int i = 0; i < buttons.length -1 ; i++)
+		for (int i = 0; i < buttons.length ; i++)
 			drawButton(g, i);
-
 		drawHealth(g, health);
 		drawCoinage(g, money);
 	}
+
 
 	/**
 	 * @param index
