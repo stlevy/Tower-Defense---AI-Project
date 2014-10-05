@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import logic.Block;
 import logic.Mob;
 import logic.Room;
 import logic.Tower;
@@ -80,8 +79,8 @@ public class GameViewer extends JPanel {
 	}
 
 	private void drawRoom(Graphics g) {
-		for (Block b : room) {
-			RoomViewer.drawBlock(g, b, b.getType());
+		for (Point p : room){
+			RoomViewer.drawBlock(g,room.blockGetRect(p),room.getBlockType(p));
 		}
 	}
 
