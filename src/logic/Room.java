@@ -9,22 +9,22 @@ import java.util.Scanner;
 
 import utils.GameUtils.TILE_TYPE;
 
-public class Room extends Rectangle implements Iterable<Block> {
+public class Room extends Rectangle implements Iterable<Point> {
 
 	protected final int blockSize;
 	private Point entryPoint;
 	protected final Block[][] blocks;
-	private final int width;
-	private final int height;
+	private final int roomWidth;
+	private final int roomHeight;
 
 	public Room(int _roomWidth, int _roomHeight, int _blockSize,
 			Point _basePoint, File level) {
-		width = _roomWidth;
-		height = _roomHeight;
-		setBounds(_basePoint.x, _basePoint.y, width * _blockSize, height
+		roomWidth = _roomWidth;
+		roomHeight = _roomHeight;
+		setBounds(_basePoint.x, _basePoint.y, roomWidth * _blockSize, roomHeight
 				* _blockSize);
 
-		blocks = new Block[height][width];
+		blocks = new Block[roomHeight][roomWidth];
 
 		blockSize = _blockSize;
 		define(level);
@@ -40,8 +40,8 @@ public class Room extends Rectangle implements Iterable<Block> {
 			System.exit(-1);
 		}
 
-		for (int row = 0; row < height; row++) {
-			for (int col = 0; col < width; col++) {
+		for (int row = 0; row < roomHeight; row++) {
+			for (int col = 0; col < roomWidth; col++) {
 				if (!scanner.hasNext())
 					throw new IllegalArgumentException(
 							"given text file too small");
@@ -98,8 +98,8 @@ public class Room extends Rectangle implements Iterable<Block> {
 	}
 
 	@Override
-	public Iterator<Block> iterator() {
-		return new Iterator<Block>() {
+	public Iterator<Point> iterator() {
+		return new Iterator<Point>() {
 			int x = -1;
 			int y = 0;
 
@@ -109,14 +109,14 @@ public class Room extends Rectangle implements Iterable<Block> {
 			}
 
 			@Override
-			public Block next() {
+			public Point next() {
 				if (x != blocks[0].length - 1) {
 					x++;
 				} else {
 					y++;
 					x = 0;
 				}
-				return blocks[y][x];
+				return new Point(x,y);
 			}
 
 			@Override
@@ -150,6 +150,6 @@ public class Room extends Rectangle implements Iterable<Block> {
 	}
 	
 	public boolean pointInRoom(Point p) {
-		return p.x >= 0 && p.x < width && p.y >= 0 && p.y < height;
+		return p.x >= 0 && p.x < roomWidth && p.y >= 0 && p.y < roomHeight;
 	}
 }
