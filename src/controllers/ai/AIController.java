@@ -28,7 +28,8 @@ public class AIController implements Runnable {
 	private ResultsWriter writer;
 
 	private Heuristic h;
-
+	double currentHeuristicValue;
+	
 	private final GameConfiguration conf;
 
 	public AIController(Game _game, ResultsWriter _writer,
@@ -37,7 +38,8 @@ public class AIController implements Runnable {
 		algorithm = algo;
 		writer = _writer;
 		h = _h;
-		this.conf = game.getConfiguration();
+		conf = game.getConfiguration();
+		currentHeuristicValue = 0.0;
 	}
 
 	public void startGame() {
@@ -76,7 +78,8 @@ public class AIController implements Runnable {
 		algorithm.reset();
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
-		System.out.println(best.toString() + " worth : " + best.getWorth());
+		currentHeuristicValue += best.getWorth();
+		System.out.println("chosen: "+best.toString() + "current heuristic value: " + currentHeuristicValue);
 		return best.getTowerCoordinates();
 	}
 

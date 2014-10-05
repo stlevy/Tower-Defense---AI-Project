@@ -28,6 +28,7 @@ public class CombinedController implements Runnable {
 
 	private final AnytimeAlgorithm<BoardState> algorithm;
 	private final Heuristic h;
+	double currentHeuristicValue;
 	private final ResultsWriter writer;
 	private final GameConfiguration conf;
 
@@ -38,6 +39,7 @@ public class CombinedController implements Runnable {
 		writer = _writer;
 		h = _h;
 		conf = game.getConfiguration();
+		currentHeuristicValue = 0.0;
 		gui_viewer = new GameViewer(conf);
 	}
 
@@ -47,7 +49,7 @@ public class CombinedController implements Runnable {
 
 	@Override
 	public void run() {
-		for (level = 1; level <= conf.numberOfLevels; level++) {
+		for (level = 2; level <= conf.numberOfLevels; level++) {
 			startLevel();
 
 			while (!game.isOver()) {
@@ -81,22 +83,20 @@ public class CombinedController implements Runnable {
 		BoardState root = getGreedyRoot(availableTowers);
 		System.out.print("Searching...");
 		BoardState best = algorithm.search(root);
-		// System.out.println("node count:" + algorithm.getExpendedNodes());
+//		 System.out.println("node count:" + algorithm.getExpendedNodes());
 		algorithm.reset();
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
-		System.out.println(best.toString() + " worth : " + best.getWorth());
+		currentHeuristicValue += best.getWorth();
+		System.out.println("chosen "+best.toString() + "current heuristic value: " + currentHeuristicValue);
 		return best.getTowerCoordinates();
 	}
 
 	private BoardState getGreedyRoot(int availableTowers) {
 		final PathHeuristic greedyHeu = new PathHeuristic();
 		List<Point> l = new ArrayList<>();
-		for (int x = 0; x < conf.roomWidth; x++) {
-			for (int y = 0; y < conf.roomHeight; y++) {
-				l.add(new Point(x, y));
-			}
-		}
+		for (Point p : game)
+				l.add(p);
 		Comparator<Point> comareByHeuristics = new Comparator<Point>() {
 
 			@Override
