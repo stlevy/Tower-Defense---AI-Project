@@ -3,8 +3,19 @@ where each tower is granted a damage bonus for each tower next to him (at all 8 
 for example , if a tower has 5 neighbor towers, he gets 5 bonuses.   
 
 
-To run the game , open a cmd and run:
+To run the game , first download:
+	- Results directory
+	- Levels diretory
+	- resources directory ( if you want gui)
+	- game.jar 
+
+open a cmd and run:
 java -jar game.jar <Mode> [<t> <w> <alpha>]
+
+example :
+java -jar game.jar gui 1000 100 0.25
+
+will the ai player in gui mode, with 1 second to run the algorithm, beam width 100 and alpha=0.25
 
 Mode :
 	- "human" - you want to play the game for yourself
