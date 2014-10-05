@@ -1,6 +1,7 @@
 package ai.algorithms.heuristics;
 
 import java.awt.Point;
+import java.util.List;
 
 import logic.Game;
 import utils.GameUtils.TILE_TYPE;
@@ -9,7 +10,7 @@ import ai.algorithms.nodes.BoardState;
 
 /**
  * calculates the heuristic value of a game node (BoardState) by summing the
- * amount of path the new towers "sees"
+ * amount of path the towers "sees"
  * 
  * @author Tomer
  * 
@@ -23,7 +24,11 @@ public class PathHeuristic implements Heuristic {
 
 		BoardState s = (BoardState) node;
 		int pathIntersecionsSum = 0;
-		for (Point towerCoord : s.getTowerCoordinates()) {
+		List<Point> towers = s.getTowerCoordinates();
+		for (Point p : game)
+			if (game.hasTower(p))
+				towers.add(p);
+		for (Point towerCoord : towers) {
 			int intersects = pathIntersections(towerCoord,game);
 			if (intersects < 0)
 				return -1;
