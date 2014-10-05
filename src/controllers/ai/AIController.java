@@ -30,7 +30,7 @@ public class AIController implements Runnable {
 	private Heuristic h;
 
 	private final GameConfiguration conf;
- 
+
 	public AIController(Game _game, ResultsWriter _writer,
 			AnytimeAlgorithm<BoardState> algo, Heuristic _h) {
 		game = _game;
@@ -60,7 +60,8 @@ public class AIController implements Runnable {
 				game.gamePhysics();
 			}
 			writer.sumLevel(level, game.getMoney(), game.getHealth(),
-					game.getMobsKilled(), game.getTowers().size(),conf.numberOfMobs);
+					game.getMobsKilled(), game.getTowers().size(),
+					conf.numberOfMobs);
 			if (!continueToNextLevel())
 				break;
 		}
@@ -80,24 +81,21 @@ public class AIController implements Runnable {
 	}
 
 	private BoardState getGreedyRoot(int availableTowers) {
-		final PathHeuristic greedyHeu = new PathHeuristic(game);
+		final PathHeuristic greedyHeu = new PathHeuristic();
 		List<Point> l = new ArrayList<>();
-		for (int x = 0; x < conf.roomWidth; x++) {
-			for (int y = 0; y < conf.roomHeight; y++) {
-				l.add(new Point(x, y));
-			}
-		}
+		for (Point p : game)
+			l.add(p);
 		Comparator<Point> comareByHeuristics = new Comparator<Point>() {
 
 			@Override
 			public int compare(Point p1, Point p2) {
-				return greedyHeu.pathIntersections(p2)
-						- greedyHeu.pathIntersections(p1);
+				return greedyHeu.pathIntersections(p2,game)
+						- greedyHeu.pathIntersections(p1,game);
 			}
 		};
 		Collections.sort(l, comareByHeuristics);
 		List<Point> best = l.subList(0, availableTowers);
-		return new BoardState(best, conf.roomWidth, conf.roomHeight, h);
+		return new BoardState(best, h, game);
 	}
 
 	private void startLevel() {
