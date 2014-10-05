@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import logic.factories.MobFactory;
@@ -223,5 +224,10 @@ public class GameModel implements Game {
 	@Override
 	public GameConfiguration getConfiguration() {
 		return conf;
+	}
+
+	@Override
+	public Iterator<Point> iterator() {
+		return room.iterator();
 	}
 }
