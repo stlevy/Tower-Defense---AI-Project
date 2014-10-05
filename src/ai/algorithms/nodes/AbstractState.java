@@ -2,6 +2,7 @@ package ai.algorithms.nodes;
 
 import java.util.Vector;
 
+import logic.Game;
 import ai.algorithms.heuristics.Heuristic;
 
 /**
@@ -35,14 +36,15 @@ public abstract class AbstractState implements Comparable<AbstractState> {
 
 	protected Heuristic h;
 	private Double worth = null;
-
+	protected Game game;
 	/**
 	 * Creates an <code>AbstractState</code> instance and sets it to an initial
 	 * search state. One will generally want to override this constructor to
 	 * initialize a root node for search.
 	 */
-	public AbstractState(Heuristic h) {
+	public AbstractState(Heuristic h,Game game) {
 		this.h = h;
+		this.game = game;
 	}
 
 	/**
@@ -55,7 +57,7 @@ public abstract class AbstractState implements Comparable<AbstractState> {
 	public final Double getWorth() {
 		if (worth != null)
 			return worth;
-		worth = h.getHeuristicValue(this);
+		worth = h.getHeuristicValue(this,game);
 		return worth;
 	}
 
