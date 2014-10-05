@@ -1,6 +1,7 @@
 this Tower Defense game is a normal TD game,
-where each tower is granted a damage bonus for each tower next to him (at all 8 directions)
-for example , if a tower has 5 neighbor towers, he gets 5 bonuses.   
+where each tower is leveled up for each tower next to him (at all 8 directions)
+for example , if a tower has 5 neighbor towers,he is at level 5.
+at each level up, the tower gets stronger.   
 
 
 To run the game , first download:
@@ -26,12 +27,13 @@ Mode :
 			in this mode, the results are written to Results/results.csv , make sure it's closed
 			
 t :
-	the AI algorithm running time, in milliseconds 
+	the AI algorithm running time, in milliseconds.
+	the algorithm will stop after t milliseconds and return the best state it found (anytime algorithm)
 w : 
 	the width of the beam in the "beam search" algorithm
 alpha : where 0<=alpha<=1
 	the algorithms has 2 heuristics 
 		- "Path heuristics" - maximizes the amount of path seen by the towers
-		- "Tower heuristics" - maximizes the amount of "effective bonuses" of the tower
-			where an "effective bonus" is a bonus for a tower that sees some path.
+		- "Tower heuristics" - maximizes the "effective levels" of the towers,
+			where "effective level" is the level of the tower that SEES some path.
 		the heuristics the game runs is (alpha*PathHeuristics) + ((1-alpha) * TowerHeuristics)   
