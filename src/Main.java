@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 import logic.Game;
 import logic.GameModel;
@@ -31,9 +30,6 @@ public class Main {
 		int runningTime = Integer.parseInt(args[1]);
 		int beamSize = Integer.parseInt(args[2]);
 		double alpha = Double.parseDouble(args[3]);
-		String description = "Weighted Heuristics "
-				+ new DecimalFormat("#.00").format(alpha);
-
 		// AI algorithm
 		BeamSearchPrioriryQueue<BoardState> algo = new BeamSearchPrioriryQueue<>(
 				beamSize, runningTime);
@@ -43,7 +39,8 @@ public class Main {
 		Heuristic path = new PathHeuristic();
 		Heuristic h = new WeightedHeuristics(server, path, bonus, alpha);
 
-		ResultsWriter text_viewer = new ResultsWriter(description, runningTime,
+		ResultsWriter text_viewer = new ResultsWriter(
+				server.getConfiguration().numberOfLevels, runningTime,
 				beamSize, alpha);
 
 		if (args[0].equals("gui")) {
