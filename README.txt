@@ -5,9 +5,8 @@ at each level up, the tower gets stronger.
 
 
 To run the game , first download:
-	- Results directory
 	- Levels diretory
-	- resources directory ( if you want gui)
+	- resources directory ( required for gui and human mode)
 	- game.jar 
 
 open a cmd and run:
