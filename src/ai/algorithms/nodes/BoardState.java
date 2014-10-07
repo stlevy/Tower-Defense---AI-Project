@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import utils.GameUtils.TILE_TYPE;
 import logic.Game;
 import ai.algorithms.heuristics.Heuristic;
 
@@ -12,13 +13,13 @@ public class BoardState extends AbstractState {
 
 	private final List<Point> towerCoordinates;
 
-	public BoardState(List<Point> points, Heuristic h,Game game) {
-		super(h,game);
+	public BoardState(List<Point> points, Heuristic h, Game game) {
+		super(h, game);
 		towerCoordinates = new ArrayList<>(points);
 	}
 
 	private BoardState(BoardState board) {
-		this(board.getTowerCoordinates(), board.h,board.game);
+		this(board.getTowerCoordinates(), board.h, board.game);
 	}
 
 	@Override
@@ -26,12 +27,14 @@ public class BoardState extends AbstractState {
 		Vector<BoardState> sons = new Vector<>();
 		BoardState temp = new BoardState(this);
 		for (int pointIdx = 0; pointIdx < towerCoordinates.size(); pointIdx++) {
-			for (Point p : game){ 
-				if (towerCoordinates.contains(p))
-					continue; // already a tower in this location
+			for (Point p : game) {
+				if (towerCoordinates.contains(p)
+						|| game.getBlockType(p) != TILE_TYPE.GROUND
+						|| game.hasTower(p))
+					continue; // remove illegal states
 
-				temp.towerCoordinates.set(pointIdx,p);
-				sons.add(new BoardState(temp));				
+				temp.towerCoordinates.set(pointIdx, p);
+				sons.add(new BoardState(temp));
 			}
 			// return the tower to it's original place
 			temp.towerCoordinates.set(pointIdx, towerCoordinates.get(pointIdx));
