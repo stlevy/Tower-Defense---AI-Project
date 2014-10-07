@@ -86,7 +86,7 @@ public class GameViewer extends JPanel {
 
 	private void drawMobs(Graphics g) {
 		for (Mob mob : mobs) {
-			MobViewer.draw(g, mob, mob.getHealth(), mob.isInGame());
+			MobViewer.draw(g, mob, mob.getHealth(), mob.isInGame(),conf.mobHealth);
 		}
 	}
 

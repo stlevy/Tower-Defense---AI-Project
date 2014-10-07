@@ -70,5 +70,8 @@ public class GUIUtils {
 				(int) b.getCenterX(), (int) b.getCenterY());
 	}
 	
+	//Mob Viewer constants
+	
+	public static final int healthBarHeight = 7;
 	
 }
