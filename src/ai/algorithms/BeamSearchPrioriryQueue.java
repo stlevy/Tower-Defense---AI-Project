@@ -43,15 +43,15 @@ public class BeamSearchPrioriryQueue<T extends AbstractState> extends AnytimeAlg
 		return bestNode;
 	}
 
-	private boolean tryToAddToBeam(PriorityQueue<T> current, T node) {
-		if (current.size() < beamWidth) {
-			current.add(node);
+	private boolean tryToAddToBeam(PriorityQueue<T> beam, T node) {
+		if (beam.size() < beamWidth) {
+			beam.add(node);
 			return true;
 		}
 
-		if (current.peek().getWorth() < node.getWorth()) {
-			current.remove();
-			current.add(node);
+		if (beam.peek().getWorth() < node.getWorth()) {
+			beam.remove();
+			beam.add(node);
 			return true;
 		}
 		return false;
