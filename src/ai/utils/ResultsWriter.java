@@ -30,17 +30,11 @@ public class ResultsWriter {
 				throw new IllegalStateException("cannot create folder Results");
 
 		resultsFile = new File("Results/results.csv");
-
+		boolean headerNeeded = ! (resultsFile.exists()) ;
 		FileWriter fw = new FileWriter(resultsFile.getAbsoluteFile(), true);
 		bw = new BufferedWriter(fw);
-
-		if (!(resultsFile.exists())) {
-			if (!resultsFile.createNewFile())
-				throw new IllegalStateException(
-						"cannot create file Results/results.csv");
-		} else {
+		if (headerNeeded)
 			initializeResultsFile(levels);
-		}
 
 		writeCSVvalue("" + runningTime);
 		writeCSVvalue("" + beamWidth);

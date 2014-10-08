@@ -46,9 +46,10 @@ public class CombinedController implements Runnable {
 		gameThread.run();
 	}
 
+	//TODO: think how to prevent code duplication between controllers
 	@Override
 	public void run() {
-		for (level = 2; level <= conf.numberOfLevels; level++) {
+		for (level = 1; level <= conf.numberOfLevels; level++) {
 			startLevel();
 
 			while (!game.isOver()) {

@@ -43,7 +43,7 @@ def seperator(str):
 if __name__ == '__main__':
 	seperator('alpha')
 	alpha_experiment()
-	# seperator('width')
-	# width_experiment()
-	# seperator('time')
-	# time_experiment()
+	seperator('width')
+	width_experiment()
+	seperator('time')
+	time_experiment()
