@@ -1,12 +1,12 @@
-package ai.algorithms.heuristics;
+package ai.heuristics;
 
 import java.awt.Point;
 import java.util.List;
 
 import logic.Game;
 import utils.GameUtils.TILE_TYPE;
-import ai.algorithms.nodes.AbstractState;
-import ai.algorithms.nodes.BoardState;
+import ai.nodes.AbstractState;
+import ai.nodes.BoardState;
 
 /**
  * This heuristic evaluates a Board state by the sum of tower level ups

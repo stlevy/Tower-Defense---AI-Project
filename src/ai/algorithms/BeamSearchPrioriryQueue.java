@@ -2,7 +2,7 @@ package ai.algorithms;
 
 import java.util.PriorityQueue;
 
-import ai.algorithms.nodes.AbstractState;
+import ai.nodes.AbstractState;
 
 public class BeamSearchPrioriryQueue<T extends AbstractState> extends AnytimeAlgorithm<T> {
 

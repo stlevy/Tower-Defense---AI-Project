@@ -2,7 +2,7 @@ package ai.algorithms;
 
 import java.util.Vector;
 
-import ai.algorithms.nodes.AbstractState;
+import ai.nodes.AbstractState;
 import ai.utils.StopperThread;
 
 /**

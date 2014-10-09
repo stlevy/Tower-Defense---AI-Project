@@ -1,4 +1,4 @@
-package ai.algorithms.nodes;
+package ai.nodes;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import utils.GameUtils.TILE_TYPE;
 import logic.Game;
-import ai.algorithms.heuristics.Heuristic;
+import ai.heuristics.Heuristic;
 
 public class BoardState extends AbstractState {
 

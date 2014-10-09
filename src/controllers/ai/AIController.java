@@ -11,9 +11,9 @@ import java.util.List;
 import logic.Game;
 import utils.GameConfiguration;
 import ai.algorithms.AnytimeAlgorithm;
-import ai.algorithms.heuristics.Heuristic;
-import ai.algorithms.heuristics.PathHeuristic;
-import ai.algorithms.nodes.BoardState;
+import ai.heuristics.Heuristic;
+import ai.heuristics.PathHeuristic;
+import ai.nodes.BoardState;
 import ai.utils.ResultsWriter;
 
 public class AIController implements Runnable {

@@ -1,9 +1,9 @@
-package ai.algorithms.nodes;
+package ai.nodes;
 
 import java.util.Vector;
 
 import logic.Game;
-import ai.algorithms.heuristics.Heuristic;
+import ai.heuristics.Heuristic;
 
 /**
  * AbstractState.java - a simple node for uninformed AI search (assuming cost

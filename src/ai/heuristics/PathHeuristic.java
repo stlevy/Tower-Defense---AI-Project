@@ -1,11 +1,11 @@
-package ai.algorithms.heuristics;
+package ai.heuristics;
 
 import java.awt.Point;
 
 import logic.Game;
 import utils.GameUtils.TILE_TYPE;
-import ai.algorithms.nodes.AbstractState;
-import ai.algorithms.nodes.BoardState;
+import ai.nodes.AbstractState;
+import ai.nodes.BoardState;
 
 /**
  * calculates the heuristic value of a game node (BoardState) by summing the

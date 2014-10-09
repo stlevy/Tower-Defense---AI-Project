@@ -1,7 +1,7 @@
-package ai.algorithms.heuristics;
+package ai.heuristics;
 
 import logic.Game;
-import ai.algorithms.nodes.AbstractState;
+import ai.nodes.AbstractState;
 
 public interface Heuristic {
 	
