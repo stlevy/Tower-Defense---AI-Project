@@ -33,6 +33,8 @@ public class GameViewer extends JPanel {
 	private int currentLevel;
 	
 	private final GUIConfiguration gui_conf;
+
+	private boolean levelStarted;
 	public GameViewer(GameConfiguration conf,GUIConfiguration gui_conf) {
 		this.conf = conf;
 		this.gui_conf = gui_conf;
@@ -49,9 +51,10 @@ public class GameViewer extends JPanel {
 		isFirst = false;
 	}
 
-	public void draw(int money, int health) {
+	public void draw(boolean started,int money, int health) {
 		currentHealth = health;
 		currentMoney = money;
+		levelStarted = started;
 		repaint();
 	}
 
@@ -62,7 +65,10 @@ public class GameViewer extends JPanel {
 		g.clearRect(0, 0, getGuiConf().frameSize.width, getGuiConf().frameSize.height);
 		int font_size = getGuiConf().fontSize * 2;
 		g.setFont(new Font("Ariel", Font.BOLD, font_size));
-		g.drawString("Playing level "+currentLevel, getGuiConf().frameSize.width/4, font_size*2);
+			if(levelStarted)
+				g.drawString("Playing level "+currentLevel, getGuiConf().frameSize.width/4, font_size*2);
+			else
+				g.drawString("Press here to begin", getGuiConf().frameSize.width/4, font_size*2);
 		drawRoom(g);
 		drawTowers(g);
 		drawMobs(g);

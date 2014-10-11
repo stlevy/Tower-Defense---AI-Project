@@ -25,7 +25,7 @@ public class GUIController implements Runnable {
 
 	private int level;
 	private int numberOfLevels;
-
+	private boolean started = false;
 	private GUIConfiguration gui_conf;
 	public GUIController(Game _game,GUIConfiguration gui_conf) {
 		game = _game;
@@ -55,7 +55,7 @@ public class GUIController implements Runnable {
 			while (!game.isOver()) {
 				game.gamePhysics();
 
-				viewer.draw(game.getMoney(), game.getHealth());
+				viewer.draw(started,game.getMoney(), game.getHealth());
 
 				try {
 					Thread.sleep(1);
@@ -63,17 +63,18 @@ public class GUIController implements Runnable {
 					e.printStackTrace();
 				}
 			}
-			if (!continueToNextLevel())
-				break;
+			started = false;
 		}
 		endGame();
 	}
 
 	private void startLevel() {
 		game.initializeLevel(level, gui_conf.frameSize.width,
-				gui_conf.frameSize.height - 20);
+				gui_conf.frameSize.height);
 		viewer.initializeLevel(level, game.getRoom(), game.getMobs(),
 				game.getTowers());
+		while(!started)
+			viewer.draw(started,game.getMoney(), game.getHealth());
 	}
 
 	private void endGame() {
@@ -82,25 +83,19 @@ public class GUIController implements Runnable {
 		System.exit(0);
 	}
 
-	private boolean continueToNextLevel() {
-//		if (level == GameUtils.numberOfLevels)
-//			return false;
-//		return JOptionPane.showConfirmDialog(null,
-//				"Press OK for next level, Cancel to exit", "Bad AI!",
-//				JOptionPane.OK_CANCEL_OPTION) != JOptionPane.CANCEL_OPTION;
-		return true;
-	}
-
 	public void click(MouseEvent e) {
 		Point roomCoord = viewer.mseCoordsInRoom(mse);
 		if (roomCoord != null) {
 			roomClick(roomCoord);
+			return;
 		}
 		int itemIdx = viewer.mseIndexInStore(mse);
 		if (itemIdx >= 0) {
 			storeClick(itemIdx);
+			return;
 		}
-
+		if ( !started )
+			started = true;
 	}
 
 	private void roomClick(Point roomCoord) {

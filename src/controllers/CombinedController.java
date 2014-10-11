@@ -64,7 +64,7 @@ public class CombinedController implements Runnable {
 				}
 
 				game.gamePhysics();
-				gui_viewer.draw(game.getMoney(), game.getHealth());
+				gui_viewer.draw(true,game.getMoney(), game.getHealth());
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
