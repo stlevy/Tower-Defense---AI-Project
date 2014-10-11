@@ -91,14 +91,15 @@ def analyze_level(level):
 
 seperator = ','
 out = open('analasis.csv','wt')
-out.write("level"+seperator+"path length"+seperator+"effective area"+seperator+"attack angles\n")
+out.write("level"+seperator+"path length"+seperator+"effective area"+seperator+"attack angles"+seperator+"average angles\n")
 
 for n in range(1,21):
 	level = open('level%d.txt'  %(n,) ,'rt')
 	out.write('['+level.name+']'+seperator)
 	length,area,angles = analyze_level(level)		
-	out.write(str(length)+seperator)
-	out.write(str(area)+seperator)
-	out.write(str(angles)+'\n')
+	out.write(("%d"+seperator) %(length,))
+	out.write(("%d"+seperator) %(area,))
+	out.write(("%d"+seperator) %(angles,))
+	out.write(("%.2f\n") %(float(angles)/length,)) 
 	level.close()
 
