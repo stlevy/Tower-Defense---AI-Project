@@ -1,7 +1,5 @@
 package controllers.ai;
 
-import gui.GUIUtils;
-
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,15 +27,19 @@ public class AIController implements Runnable {
 
 	private Heuristic h;
 	double currentHeuristicValue;
-	
+
 	private final GameConfiguration conf;
+	private final int gameWidth, gameHeight;
 
 	public AIController(Game _game, ResultsWriter _writer,
-			AnytimeAlgorithm<BoardState> algo, Heuristic _h) {
+			AnytimeAlgorithm<BoardState> algo, Heuristic _h, int width,
+			int height) {
 		game = _game;
 		algorithm = algo;
 		writer = _writer;
 		h = _h;
+		gameWidth = width;
+		gameHeight = height;
 		conf = game.getConfiguration();
 	}
 
@@ -78,7 +80,8 @@ public class AIController implements Runnable {
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
 		currentHeuristicValue += best.getWorth();
-		System.out.println("chosen: "+best.toString() + "current heuristic value: " + currentHeuristicValue);
+		System.out.println("chosen: " + best.toString()
+				+ "current heuristic value: " + currentHeuristicValue);
 		return best.getTowerCoordinates();
 	}
 
@@ -91,8 +94,8 @@ public class AIController implements Runnable {
 
 			@Override
 			public int compare(Point p1, Point p2) {
-				return greedyHeu.pathIntersections(p2,game)
-						- greedyHeu.pathIntersections(p1,game);
+				return greedyHeu.pathIntersections(p2, game)
+						- greedyHeu.pathIntersections(p1, game);
 			}
 		};
 		Collections.sort(l, comareByHeuristics);
@@ -102,8 +105,7 @@ public class AIController implements Runnable {
 
 	private void startLevel() {
 		currentHeuristicValue = 0.0;
-		game.initializeLevel(level, GUIUtils.frameSize.width,
-				GUIUtils.frameSize.height - 20);
+		game.initializeLevel(level, gameWidth, gameHeight);
 		writer.initializeLevel(level);
 	}
 

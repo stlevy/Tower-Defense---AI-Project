@@ -1,6 +1,6 @@
 package gui.viewers;
 
-import gui.GUIUtils;
+import gui.GUIConfiguration;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,11 +11,11 @@ public class MobViewer {
 	/**
 	 * draws the mob in its current location, with health amount.
 	 */
-	public static void draw(Graphics g,Rectangle mob, double mobHealth,boolean isInGame,double maxHealth) {
+	public static void draw(Graphics g,Rectangle mob, double mobHealth,boolean isInGame,double maxHealth,GUIConfiguration conf) {
 		if (!isInGame)
 			return;
-		GUIUtils.drawRectImage(g, mob, GUIUtils.tile_mob);
-		Rectangle healthBar = new Rectangle(mob.x,mob.y-GUIUtils.healthBarHeight,mob.width,GUIUtils.healthBarHeight);
+		GUIConfiguration.drawRectImage(g, mob, GUIConfiguration.tile_mob);
+		Rectangle healthBar = new Rectangle(mob.x,mob.y-conf.healthBarHeight,mob.width,conf.healthBarHeight);
 		int width = (int) (mob.width*mobHealth/maxHealth);
 		g.drawRect(healthBar.x, healthBar.y, width, healthBar.height);
 		Color c = g.getColor();

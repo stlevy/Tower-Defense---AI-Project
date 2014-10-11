@@ -1,6 +1,6 @@
 package gui.viewers;
 
-import gui.GUIUtils;
+import gui.GUIConfiguration;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -29,17 +29,17 @@ public class RoomViewer {
 
 	public static void drawBlock(Graphics g, Rectangle block ,TILE_TYPE type) {
 		Image img = getImage(type);
-		GUIUtils.drawRectImage(g, block, img);
+		GUIConfiguration.drawRectImage(g, block, img);
 	}
 
 	private static Image getImage(TILE_TYPE _type) {
 		switch (_type) {
 		case GROUND:
-			return GUIUtils.tile_ground;
+			return GUIConfiguration.tile_ground;
 		case PATH:
-			return GUIUtils.tile_path;
+			return GUIConfiguration.tile_path;
 		case END:
-			return GUIUtils.tile_end;
+			return GUIConfiguration.tile_end;
 		case EMPTY:
 		default:
 			throw new IllegalArgumentException("Unknown type , cannot parse");

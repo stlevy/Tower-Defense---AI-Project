@@ -1,3 +1,5 @@
+import gui.GUIConfiguration;
+
 import java.io.IOException;
 
 import logic.Game;
@@ -20,10 +22,11 @@ import controllers.gui.GUIController;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		int speedFactor = getSpeedFactor(args[0]);
+		GUIConfiguration guiConf = new GUIConfiguration();
 		Game server = new GameModel(new MobFactory(), new TowerFactory(),
 				new GameConfiguration(speedFactor));
 		if (args[0].equals("human")) {
-			guiNoAI(server);
+			guiNoAI(server, guiConf);
 			return;
 		}
 		// Experiment constants
@@ -44,12 +47,12 @@ public class Main {
 				beamSize, alpha);
 
 		if (args[0].equals("gui")) {
-			guiAI(server, text_viewer, algo, h);
+			guiAI(server, text_viewer, algo, h, guiConf);
 			return;
 		}
 
 		if (args[0].equals("ai")) {
-			guilessAI(server, text_viewer, algo, h);
+			guilessAI(server, text_viewer, algo, h, guiConf);
 			return;
 		}
 		throw new IllegalArgumentException("args[0] was not a valid argument");
@@ -66,22 +69,25 @@ public class Main {
 	}
 
 	private static void guiAI(Game server, ResultsWriter text_viewer,
-			AnytimeAlgorithm<BoardState> algo, Heuristic h) {
+			AnytimeAlgorithm<BoardState> algo, Heuristic h,
+			GUIConfiguration guiConf) {
 		CombinedController controller = new CombinedController(server,
-				text_viewer, algo, h);
+				text_viewer, algo, h, guiConf);
 		controller.run();
 	}
 
 	public static void guilessAI(Game server, ResultsWriter text_viewer,
-			AnytimeAlgorithm<BoardState> algo, Heuristic h) throws IOException {
+			AnytimeAlgorithm<BoardState> algo, Heuristic h,
+			GUIConfiguration guiConf) throws IOException {
 
-		AIController controller = new AIController(server, text_viewer, algo, h);
+		AIController controller = new AIController(server, text_viewer, algo,
+				h, guiConf.frameSize.width, guiConf.frameSize.height);
 		controller.startGame();
 	}
 
-	public static void guiNoAI(Game server) {
+	public static void guiNoAI(Game server, GUIConfiguration guiConf) {
 
-		GUIController controller = new GUIController(server);
+		GUIController controller = new GUIController(server, guiConf);
 		controller.startGame();
 	}
 }

@@ -9,8 +9,8 @@ public class Frame extends JFrame{
 
 
 	public Frame(GameViewer viewer) {
-		setTitle(GUIUtils.frameTitle);
-		setSize(GUIUtils.frameSize);
+		setTitle(viewer.getGuiConf().frameTitle);
+		setSize(viewer.getGuiConf().frameSize);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

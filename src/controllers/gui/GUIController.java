@@ -1,6 +1,6 @@
 package controllers.gui;
 
-import gui.GUIUtils;
+import gui.GUIConfiguration;
 import gui.GameViewer;
 
 import java.awt.Point;
@@ -26,11 +26,12 @@ public class GUIController implements Runnable {
 	private int level;
 	private int numberOfLevels;
 
-	public GUIController(Game _game) {
+	private GUIConfiguration gui_conf;
+	public GUIController(Game _game,GUIConfiguration gui_conf) {
 		game = _game;
-		
+		this.gui_conf = gui_conf;
 		GameConfiguration configuration = game.getConfiguration();
-		viewer = new GameViewer(configuration);
+		viewer = new GameViewer(configuration,gui_conf);
 		
 		trashIdx = configuration.storeSlots - 1;
 		numberOfLevels = configuration.numberOfLevels;
@@ -69,8 +70,8 @@ public class GUIController implements Runnable {
 	}
 
 	private void startLevel() {
-		game.initializeLevel(level, GUIUtils.frameSize.width,
-				GUIUtils.frameSize.height - 20);
+		game.initializeLevel(level, gui_conf.frameSize.width,
+				gui_conf.frameSize.height - 20);
 		viewer.initializeLevel(level, game.getRoom(), game.getMobs(),
 				game.getTowers());
 	}

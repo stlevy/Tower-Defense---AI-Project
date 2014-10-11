@@ -1,6 +1,6 @@
 package controllers;
 
-import gui.GUIUtils;
+import gui.GUIConfiguration;
 import gui.GameViewer;
 
 import java.awt.Point;
@@ -31,15 +31,16 @@ public class CombinedController implements Runnable {
 	double currentHeuristicValue;
 	private final ResultsWriter writer;
 	private final GameConfiguration conf;
-
+	private final GUIConfiguration gui_conf;
 	public CombinedController(Game _game, ResultsWriter _writer,
-			AnytimeAlgorithm<BoardState> _algo, Heuristic _h) {
+			AnytimeAlgorithm<BoardState> _algo, Heuristic _h,GUIConfiguration gui_conf) {
 		game = _game;
 		algorithm = _algo;
 		writer = _writer;
 		h = _h;
 		conf = game.getConfiguration();
-		gui_viewer = new GameViewer(conf);
+		this.gui_conf = gui_conf;
+		gui_viewer = new GameViewer(conf,gui_conf);
 	}
 
 	public void startGame() {
@@ -112,8 +113,8 @@ public class CombinedController implements Runnable {
 
 	private void startLevel() {
 		currentHeuristicValue = 0.0;
-		game.initializeLevel(level, GUIUtils.frameSize.width,
-				GUIUtils.frameSize.height - 20);
+		game.initializeLevel(level, gui_conf.frameSize.width,
+				gui_conf.frameSize.height - 20);
 
 		gui_viewer.initializeLevel(level, game.getRoom(), game.getMobs(),
 				game.getTowers());

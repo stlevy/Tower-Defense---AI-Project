@@ -9,10 +9,10 @@ import org.ini4j.Profile.Section;
 
 public class GameConfiguration {
 
-	private static final String CONFINGURAION_FILE = "Levels/conf.ini";
+	private final String CONFIGURATION_FILE = "configurations/conf.ini";
 	
 	public GameConfiguration(int speedFactor) throws InvalidFileFormatException, IOException {
-		Ini confFile = new Ini(new File(CONFINGURAION_FILE));		
+		Ini confFile = new Ini(new File(CONFIGURATION_FILE));		
 		Section mobSect = confFile.get("Mob");
 		mobHealth = Integer.parseInt(mobSect.get("mobHealth"));
 		mobSpeed = Integer.parseInt(mobSect.get("mobSpeed")) /speedFactor;

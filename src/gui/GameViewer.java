@@ -32,8 +32,10 @@ public class GameViewer extends JPanel {
 	private int currentMoney;
 	private int currentLevel;
 	
-	public GameViewer(GameConfiguration conf) {
+	private final GUIConfiguration gui_conf;
+	public GameViewer(GameConfiguration conf,GUIConfiguration gui_conf) {
 		this.conf = conf;
+		this.gui_conf = gui_conf;
 		@SuppressWarnings("unused")
 		Frame gameFrame = new Frame(this);
 	}
@@ -57,10 +59,10 @@ public class GameViewer extends JPanel {
 	public void paintComponent(Graphics g) {
 		if (isFirst)
 			return;
-		g.clearRect(0, 0, GUIUtils.frameSize.width, GUIUtils.frameSize.height);
-		int font_size = GUIUtils.fontSize * 2;
+		g.clearRect(0, 0, getGuiConf().frameSize.width, getGuiConf().frameSize.height);
+		int font_size = getGuiConf().fontSize * 2;
 		g.setFont(new Font("Ariel", Font.BOLD, font_size));
-		g.drawString("playing level "+currentLevel, 0, font_size);
+		g.drawString("Playing level "+currentLevel, getGuiConf().frameSize.width/4, font_size*2);
 		drawRoom(g);
 		drawTowers(g);
 		drawMobs(g);
@@ -74,7 +76,7 @@ public class GameViewer extends JPanel {
 	private void drawTowers(Graphics g) {
 		for (Tower tower : towers) {
 			TowerViewer.draw(g, tower, tower.getRange(), tower.isAiming(),
-					tower.getAimedMob(),tower.getLevel());
+					tower.getAimedMob(),tower.getLevel(),gui_conf);
 		}
 	}
 
@@ -86,7 +88,7 @@ public class GameViewer extends JPanel {
 
 	private void drawMobs(Graphics g) {
 		for (Mob mob : mobs) {
-			MobViewer.draw(g, mob, mob.getHealth(), mob.isInGame(),conf.mobHealth);
+			MobViewer.draw(g, mob, mob.getHealth(), mob.isInGame(),conf.mobHealth,gui_conf);
 		}
 	}
 
@@ -100,19 +102,23 @@ public class GameViewer extends JPanel {
 
 	private void initializeStore(int level, int gameWidth, int gameHeight) {
 		int initialX = (gameWidth / 2)
-				- (conf.storeSlots * GUIUtils.itemSize / 2);
-		int initialY = gameHeight - GUIUtils.itemSize
-				- GUIUtils.storeSlotsSeperator;
+				- (conf.storeSlots * getGuiConf().itemSize / 2);
+		int initialY = gameHeight - getGuiConf().itemSize
+				- getGuiConf().storeSlotsSeperator;
 		Point initialStorePoint = new Point(initialX, initialY);
 		Point healthPoint = new Point(initialX / 4, initialY - 2
-				* GUIUtils.iconSize);
+				* getGuiConf().iconSize);
 		Point coinagePoint = new Point(initialX / 4, initialY);
 		storeViewer = new StoreViewer(initialStorePoint, healthPoint,
-				coinagePoint,conf.storeSlots,conf.prices);
+				coinagePoint,conf.storeSlots,conf.prices,gui_conf);
 	}
 
 	public boolean getIsFirst() {
 		return isFirst;
+	}
+
+	public GUIConfiguration getGuiConf() {
+		return gui_conf;
 	}
 
 }

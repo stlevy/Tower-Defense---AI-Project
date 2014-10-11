@@ -4,14 +4,39 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 
-public class GUIUtils {
+import org.ini4j.Ini;
+import org.ini4j.InvalidFileFormatException;
+import org.ini4j.Profile.Section;
+
+public class GUIConfiguration {
+	private final String CONFIGURATION_FILE  = "configurations/gui_conf.ini";
 	
+	public GUIConfiguration() throws InvalidFileFormatException, IOException {
+		Ini confFile = new Ini(new File(CONFIGURATION_FILE));		
+		
+		Section frameSect = confFile.get("Frame");
+		frameTitle = frameSect.get("frameTitle");
+		int frameWidth = Integer.parseInt(frameSect.get("width"));
+		int frameHeigt = Integer.parseInt(frameSect.get("height"));
+		frameSize = new Dimension(frameWidth,frameHeigt);
+
+		Section storeSect = confFile.get("Store");
+		itemSize = Integer.parseInt(storeSect.get("itemSize"));
+		storeSlotsSeperator = Integer.parseInt(storeSect.get("slotsSeperator"));
+		iconSize = Integer.parseInt(storeSect.get("iconSize"));
+		fontSize = Integer.parseInt(storeSect.get("fontSize"));
+		
+		Section mobSect = confFile.get("Mob");
+		healthBarHeight = Integer.parseInt(mobSect.get("healthBarHeight"));
+	}
 	// Frame
-	public static final String frameTitle = "Tower Defence";
-	public static final Dimension frameSize = new Dimension(650,650);
+	public final String frameTitle;
+	public final Dimension frameSize;
 	
 	
 	// Images
@@ -50,15 +75,13 @@ public class GUIUtils {
 	};
 	
 	//Store viewer constants
-	
-	
-	public static final int itemSize = 40;
+	public final int itemSize;
 
-	public static final int storeSlotsSeperator = 5;
+	public final int storeSlotsSeperator;
 
-	public static final int iconSize = 20;
+	public final int iconSize;
 	
-	public static final int fontSize = 20;
+	public final int fontSize;
 	
 	public static void drawRectImage(Graphics g, Rectangle rect, Image img) {
 		g.drawImage(img, rect.x, rect.y, rect.width, rect.height, null);
@@ -72,6 +95,6 @@ public class GUIUtils {
 	
 	//Mob Viewer constants
 	
-	public static final int healthBarHeight = 7;
+	public final int healthBarHeight;
 	
 }
