@@ -13,6 +13,9 @@ public class BoardState extends AbstractState {
 
 	private final List<Point> towerCoordinates;
 
+	/**
+	 * this constructor is only used once, to create the root node.
+	 */
 	public BoardState(List<Point> points, Heuristic h, Game game) {
 		super(h, game);
 		towerCoordinates = new ArrayList<>(points);
@@ -70,6 +73,9 @@ public class BoardState extends AbstractState {
 
 	}
 
+	/**
+	 * @returns a COPY of the original list
+	 */
 	public List<Point> getTowerCoordinates() {
 		return new ArrayList<>(towerCoordinates);
 	}

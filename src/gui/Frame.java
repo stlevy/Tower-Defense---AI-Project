@@ -4,7 +4,11 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 
-
+/**
+ * the game's containing JFrame
+ * @author Tomer
+ *
+ */
 public class Frame extends JFrame{
 
 

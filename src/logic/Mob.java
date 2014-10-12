@@ -7,6 +7,14 @@ import utils.GameUtils.Direction;
 import utils.GameUtils.TILE_TYPE;
 import utils.TimeFrame;
 
+/**
+ * this class manages the mobs logical unit:
+ * 		the mob's health
+ * 		the mob's locations
+ * 		the mob's routing algorithm
+ * @author Tomer
+ *
+ */
 public class Mob extends Rectangle {
 
 	private final Point roomEntryPoint;

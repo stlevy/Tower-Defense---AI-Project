@@ -12,6 +12,11 @@ import logic.Game;
 import utils.GameConfiguration;
 import utils.GameUtils;
 
+/**
+ * This is the GUI Controller, or 'Human', no AI is involved here, just the human player with the mouse.
+ * @author Tomer
+ *
+ */
 public class GUIController implements Runnable {
 	private GameViewer viewer;
 	private Game game;

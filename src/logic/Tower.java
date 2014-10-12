@@ -4,6 +4,14 @@ import java.awt.Rectangle;
 
 import utils.TimeFrame;
 
+/**
+ * manages the tower logical unit:
+ * 	the tower's level
+ * 	the tower's damage calculation
+ * 	the tower's aiming and firing
+ * @author Tomer
+ *
+ */
 public class Tower extends Rectangle {
 	private final TimeFrame firingFrame;
 

@@ -7,6 +7,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
+/**
+ * this class is responsible for the output of the game, 
+ * it writes the results file : Results/results.csv.
+ * @author Tomer
+ *
+ */
 public class ResultsWriter {
 	private static final String SEPERATOR = ",";
 	private final File resultsFile;

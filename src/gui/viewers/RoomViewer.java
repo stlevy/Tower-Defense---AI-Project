@@ -28,11 +28,11 @@ public class RoomViewer {
 	}
 
 	public static void drawBlock(Graphics g, Rectangle block ,TILE_TYPE type) {
-		Image img = getImage(type);
-		GUIConfiguration.drawRectImage(g, block, img);
+		Image tile = getTileImage(type);
+		GUIConfiguration.drawRectImage(g, block, tile);
 	}
 
-	private static Image getImage(TILE_TYPE _type) {
+	private static Image getTileImage(TILE_TYPE _type) {
 		switch (_type) {
 		case GROUND:
 			return GUIConfiguration.tile_ground;

@@ -1,6 +1,10 @@
 package utils;
 
-
+/**
+ * Game utility classes and enums
+ * @author Tomer
+ *
+ */
 public class GameUtils {
 	public static enum Direction{
 		right , left, upward, downward, no_direction;

@@ -12,6 +12,12 @@ import logic.factories.TowerFactory;
 import utils.GameConfiguration;
 import utils.GameUtils.TILE_TYPE;
 
+/**
+ * the game model, completely decoupled from the AI and GUI parts.
+ * simply controlls the game objects (towers,room,monsters)
+ * @author Tomer
+ *
+ */
 public class GameModel implements Game {
 
 	private Point initialRoomPoint;

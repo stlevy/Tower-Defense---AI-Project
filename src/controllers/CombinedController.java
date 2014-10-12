@@ -19,6 +19,13 @@ import ai.heuristics.PathHeuristic;
 import ai.nodes.BoardState;
 import ai.utils.ResultsWriter;
 
+/**
+ * This is the AI+GUI controller, no mouse is used here, you can just watch the
+ * AI player as he makes his way through the game.
+ * 
+ * @author Tomer
+ * 
+ */
 public class CombinedController implements Runnable {
 	private final GameViewer gui_viewer;
 	private final Game game;
@@ -32,22 +39,24 @@ public class CombinedController implements Runnable {
 	private final ResultsWriter writer;
 	private final GameConfiguration conf;
 	private final GUIConfiguration gui_conf;
+
 	public CombinedController(Game _game, ResultsWriter _writer,
-			AnytimeAlgorithm<BoardState> _algo, Heuristic _h,GUIConfiguration gui_conf) {
+			AnytimeAlgorithm<BoardState> _algo, Heuristic _h,
+			GUIConfiguration gui_conf) {
 		game = _game;
 		algorithm = _algo;
 		writer = _writer;
 		h = _h;
 		conf = game.getConfiguration();
 		this.gui_conf = gui_conf;
-		gui_viewer = new GameViewer(conf,gui_conf);
+		gui_viewer = new GameViewer(conf, gui_conf);
 	}
 
 	public void startGame() {
 		gameThread.run();
 	}
 
-	//TODO: think how to prevent code duplication between controllers
+	// TODO: think how to prevent code duplication between controllers
 	@Override
 	public void run() {
 		for (level = 1; level <= conf.numberOfLevels; level++) {
@@ -64,7 +73,7 @@ public class CombinedController implements Runnable {
 				}
 
 				game.gamePhysics();
-				gui_viewer.draw(true,game.getMoney(), game.getHealth());
+				gui_viewer.draw(true, game.getMoney(), game.getHealth());
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
@@ -84,12 +93,13 @@ public class CombinedController implements Runnable {
 		BoardState root = getGreedyRoot(availableTowers);
 		System.out.print("Searching...");
 		BoardState best = algorithm.search(root);
-//		 System.out.println("node count:" + algorithm.getExpendedNodes());
+		// System.out.println("node count:" + algorithm.getExpendedNodes());
 		algorithm.reset();
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
 		currentHeuristicValue += best.getWorth();
-		System.out.println("chosen "+best.toString() + "current heuristic value: " + currentHeuristicValue);
+		System.out.println("chosen " + best.toString()
+				+ "current heuristic value: " + currentHeuristicValue);
 		return best.getTowerCoordinates();
 	}
 
@@ -97,7 +107,7 @@ public class CombinedController implements Runnable {
 		final PathHeuristic greedyHeu = new PathHeuristic();
 		List<Point> l = new ArrayList<>();
 		for (Point p : game)
-				l.add(p);
+			l.add(p);
 		Comparator<Point> comareByHeuristics = new Comparator<Point>() {
 
 			@Override
@@ -108,7 +118,7 @@ public class CombinedController implements Runnable {
 		};
 		Collections.sort(l, comareByHeuristics);
 		List<Point> best = l.subList(0, availableTowers);
-		return new BoardState(best, h,game);
+		return new BoardState(best, h, game);
 	}
 
 	private void startLevel() {

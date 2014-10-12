@@ -2,23 +2,30 @@ package ai.utils;
 
 import ai.algorithms.AnytimeAlgorithm;
 
+/**
+ * this utility class is responsable to stop the algorithm after it's time is
+ * elapsed.
+ * 
+ * @author Tomer
+ * 
+ */
 public class StopperThread extends Thread {
 	AnytimeAlgorithm<?> algorithm;
-	long runningTime ;
-	
+	long runningTime;
+
 	public StopperThread(long runningTime) {
 		this.runningTime = runningTime;
 	}
 
-	public StopperThread(long runningTime,AnytimeAlgorithm<?> algo) {
+	public StopperThread(long runningTime, AnytimeAlgorithm<?> algo) {
 		this.runningTime = runningTime;
 		algorithm = algo;
 	}
-	
-	public void setAlgorithm(AnytimeAlgorithm<?> algo){
+
+	public void setAlgorithm(AnytimeAlgorithm<?> algo) {
 		algorithm = algo;
 	}
-	
+
 	@Override
 	public void run() {
 		try {

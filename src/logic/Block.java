@@ -3,6 +3,11 @@ import java.awt.Rectangle;
 
 import utils.GameUtils;
 
+/**
+ * a block in the room.
+ * @author Tomer
+ *
+ */
 public class Block extends Rectangle {
 
 	private GameUtils.TILE_TYPE type;

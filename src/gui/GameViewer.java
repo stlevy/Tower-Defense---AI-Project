@@ -17,6 +17,13 @@ import logic.Room;
 import logic.Tower;
 import utils.GameConfiguration;
 
+/**
+ * The main viewer, this class controlls all the other viewers under gui.viewers
+ * package in a single class
+ * 
+ * @author Tomer
+ * 
+ */
 public class GameViewer extends JPanel {
 
 	protected boolean isFirst = true;
@@ -31,18 +38,20 @@ public class GameViewer extends JPanel {
 	private int currentHealth;
 	private int currentMoney;
 	private int currentLevel;
-	
+
 	private final GUIConfiguration gui_conf;
 
 	private boolean levelStarted;
-	public GameViewer(GameConfiguration conf,GUIConfiguration gui_conf) {
+
+	public GameViewer(GameConfiguration conf, GUIConfiguration gui_conf) {
 		this.conf = conf;
 		this.gui_conf = gui_conf;
 		@SuppressWarnings("unused")
 		Frame gameFrame = new Frame(this);
 	}
 
-	public void initializeLevel(int level,Room _room, Mob[] _mobs, List<Tower> _towers) {
+	public void initializeLevel(int level, Room _room, Mob[] _mobs,
+			List<Tower> _towers) {
 		currentLevel = level;
 		room = _room;
 		mobs = _mobs;
@@ -51,7 +60,7 @@ public class GameViewer extends JPanel {
 		isFirst = false;
 	}
 
-	public void draw(boolean started,int money, int health) {
+	public void draw(boolean started, int money, int health) {
 		currentHealth = health;
 		currentMoney = money;
 		levelStarted = started;
@@ -62,13 +71,16 @@ public class GameViewer extends JPanel {
 	public void paintComponent(Graphics g) {
 		if (isFirst)
 			return;
-		g.clearRect(0, 0, getGuiConf().frameSize.width, getGuiConf().frameSize.height);
+		g.clearRect(0, 0, getGuiConf().frameSize.width,
+				getGuiConf().frameSize.height);
 		int font_size = getGuiConf().fontSize * 2;
 		g.setFont(new Font("Ariel", Font.BOLD, font_size));
-			if(levelStarted)
-				g.drawString("Playing level "+currentLevel, getGuiConf().frameSize.width/4, font_size*2);
-			else
-				g.drawString("Press here to begin", getGuiConf().frameSize.width/4, font_size*2);
+		if (levelStarted)
+			g.drawString("Playing level " + currentLevel,
+					getGuiConf().frameSize.width / 4, font_size * 2);
+		else
+			g.drawString("Press here to begin",
+					getGuiConf().frameSize.width / 4, font_size * 2);
 		drawRoom(g);
 		drawTowers(g);
 		drawMobs(g);
@@ -82,19 +94,20 @@ public class GameViewer extends JPanel {
 	private void drawTowers(Graphics g) {
 		for (Tower tower : towers) {
 			TowerViewer.draw(g, tower, tower.getRange(), tower.isAiming(),
-					tower.getAimedMob(),tower.getLevel(),gui_conf);
+					tower.getAimedMob(), tower.getLevel(), gui_conf);
 		}
 	}
 
 	private void drawRoom(Graphics g) {
-		for (Point p : room){
-			RoomViewer.drawBlock(g,room.blockGetRect(p),room.getBlockType(p));
+		for (Point p : room) {
+			RoomViewer.drawBlock(g, room.blockGetRect(p), room.getBlockType(p));
 		}
 	}
 
 	private void drawMobs(Graphics g) {
 		for (Mob mob : mobs) {
-			MobViewer.draw(g, mob, mob.getHealth(), mob.isInGame(),conf.mobHealth,gui_conf);
+			MobViewer.draw(g, mob, mob.getHealth(), mob.isInGame(),
+					conf.mobHealth, gui_conf);
 		}
 	}
 
@@ -103,7 +116,7 @@ public class GameViewer extends JPanel {
 	}
 
 	public Point mseCoordsInRoom(Point mse) {
-		return RoomViewer.mseInRoom(mse, room,conf.blockSize);
+		return RoomViewer.mseInRoom(mse, room, conf.blockSize);
 	}
 
 	private void initializeStore(int level, int gameWidth, int gameHeight) {
@@ -116,7 +129,7 @@ public class GameViewer extends JPanel {
 				* getGuiConf().iconSize);
 		Point coinagePoint = new Point(initialX / 4, initialY);
 		storeViewer = new StoreViewer(initialStorePoint, healthPoint,
-				coinagePoint,conf.storeSlots,conf.prices,gui_conf);
+				coinagePoint, conf.storeSlots, conf.prices, gui_conf);
 	}
 
 	public boolean getIsFirst() {

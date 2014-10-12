@@ -14,6 +14,11 @@ import ai.heuristics.PathHeuristic;
 import ai.nodes.BoardState;
 import ai.utils.ResultsWriter;
 
+/**
+ * this is the AI Controller, it has no GUI.
+ * @author Tomer
+ *
+ */
 public class AIController implements Runnable {
 	private Game game;
 

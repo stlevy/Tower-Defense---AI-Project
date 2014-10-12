@@ -7,6 +7,14 @@ import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Profile.Section;
 
+/**
+ * a configuration class initialized from the ini file specified in the constant
+ * {@code}CONFIGURATION_FILE{@code}
+ * 
+ * contains configurable constants for the game logic
+ * @author Tomer
+ * 
+ */
 public class GameConfiguration {
 
 	private final String CONFIGURATION_FILE = "configurations/conf.ini";

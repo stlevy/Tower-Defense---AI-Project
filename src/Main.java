@@ -21,10 +21,14 @@ import controllers.gui.GUIController;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
+		// in ai+gui mode the game runs twice as fast, in ai mode, 4 times faster 
 		int speedFactor = getSpeedFactor(args[0]);
+		
 		GUIConfiguration guiConf = new GUIConfiguration();
+		
 		Game server = new GameModel(new MobFactory(), new TowerFactory(),
 				new GameConfiguration(speedFactor));
+		//HUMAN mode
 		if (args[0].equals("human")) {
 			guiNoAI(server, guiConf);
 			return;
@@ -42,15 +46,17 @@ public class Main {
 		Heuristic path = new PathHeuristic();
 		Heuristic h = new WeightedHeuristics(server, path, bonus, alpha);
 
+		// Results Writer
 		ResultsWriter text_viewer = new ResultsWriter(
 				server.getConfiguration().numberOfLevels, runningTime,
 				beamSize, alpha);
-
+		
+		//AI + GUI
 		if (args[0].equals("gui")) {
 			guiAI(server, text_viewer, algo, h, guiConf);
 			return;
 		}
-
+		// just AI
 		if (args[0].equals("ai")) {
 			guilessAI(server, text_viewer, algo, h, guiConf);
 			return;

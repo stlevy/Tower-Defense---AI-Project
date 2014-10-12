@@ -9,6 +9,13 @@ import java.util.Scanner;
 
 import utils.GameUtils.TILE_TYPE;
 
+/**
+ * a collection of blocks, also iterable over it's blocks (going up to down,
+ * left to right)
+ * 
+ * @author Tomer
+ * 
+ */
 public class Room extends Rectangle implements Iterable<Point> {
 
 	protected final int blockSize;
@@ -21,16 +28,16 @@ public class Room extends Rectangle implements Iterable<Point> {
 			Point _basePoint, File level) {
 		roomWidth = _roomWidth;
 		roomHeight = _roomHeight;
-		setBounds(_basePoint.x, _basePoint.y, roomWidth * _blockSize, roomHeight
-				* _blockSize);
+		setBounds(_basePoint.x, _basePoint.y, roomWidth * _blockSize,
+				roomHeight * _blockSize);
 
 		blocks = new Block[roomHeight][roomWidth];
 
 		blockSize = _blockSize;
-		define(level);
+		loadMap(level);
 	}
 
-	public void define(File level) {
+	private void loadMap(File level) {
 		Scanner scanner = null;
 
 		try {
@@ -116,7 +123,7 @@ public class Room extends Rectangle implements Iterable<Point> {
 					y++;
 					x = 0;
 				}
-				return new Point(x,y);
+				return new Point(x, y);
 			}
 
 			@Override
@@ -134,9 +141,9 @@ public class Room extends Rectangle implements Iterable<Point> {
 	public int getYCoord(int _y) {
 		return (_y - y) / blockSize;
 	}
-	
-	public boolean blockWalkable(Point p){
-		switch(getBlockType(p)){
+
+	public boolean blockWalkable(Point p) {
+		switch (getBlockType(p)) {
 		case PATH:
 		case END:
 			return true;
@@ -145,10 +152,10 @@ public class Room extends Rectangle implements Iterable<Point> {
 			return false;
 		default:
 			throw new IllegalStateException("unknown block type");
-		
+
 		}
 	}
-	
+
 	public boolean pointInRoom(Point p) {
 		return p.x >= 0 && p.x < roomWidth && p.y >= 0 && p.y < roomHeight;
 	}
