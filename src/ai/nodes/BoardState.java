@@ -16,13 +16,22 @@ public class BoardState extends AbstractState {
 	/**
 	 * this constructor is only used once, to create the root node.
 	 */
-	public BoardState(List<Point> points, Heuristic h, Game game) {
+	public BoardState(int availableTowers, Heuristic h, Game game) {
 		super(h, game);
-		towerCoordinates = new ArrayList<>(points);
+		towerCoordinates = new ArrayList<>();
+		for (Point p : game) {
+			if (game.towerSeesPath(p)
+					&& game.getBlockType(p) == TILE_TYPE.GROUND
+					&& !game.hasTower(p))
+				towerCoordinates.add(p);
+			if (towerCoordinates.size() == availableTowers)
+				break;
+		}
 	}
-
+	
 	private BoardState(BoardState board) {
-		this(board.getTowerCoordinates(), board.h, board.game);
+		super(board.h, board.game);
+		towerCoordinates = new ArrayList<>(board.getTowerCoordinates());
 	}
 
 	@Override

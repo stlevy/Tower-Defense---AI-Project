@@ -5,8 +5,6 @@ import gui.GameViewer;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -15,7 +13,6 @@ import logic.Game;
 import utils.GameConfiguration;
 import ai.algorithms.AnytimeAlgorithm;
 import ai.heuristics.Heuristic;
-import ai.heuristics.PathHeuristic;
 import ai.nodes.BoardState;
 import ai.utils.ResultsWriter;
 
@@ -35,7 +32,7 @@ public class CombinedController implements Runnable {
 
 	private final AnytimeAlgorithm<BoardState> algorithm;
 	private final Heuristic h;
-	double currentHeuristicValue;
+//	private double currentHeuristicValue;
 	private final ResultsWriter writer;
 	private final GameConfiguration conf;
 	private final GUIConfiguration gui_conf;
@@ -68,7 +65,7 @@ public class CombinedController implements Runnable {
 				if (availableItemsToBuy > 0) {
 					for (Point towerCoords : AISearch(availableItemsToBuy)) {
 						game.buyTower(towerCoords, 0);
-						// writer.buyTower(towerCoords, 0);
+						 writer.buyTower(towerCoords, 0);
 					}
 				}
 
@@ -90,39 +87,21 @@ public class CombinedController implements Runnable {
 	}
 
 	private List<Point> AISearch(int availableTowers) {
-		BoardState root = getGreedyRoot(availableTowers);
-		System.out.print("Searching...");
+		BoardState root = new BoardState(availableTowers,h,game);
+//		System.out.print("Searching...");
 		BoardState best = algorithm.search(root);
 		// System.out.println("node count:" + algorithm.getExpendedNodes());
 		algorithm.reset();
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
-		currentHeuristicValue += best.getWorth();
-		System.out.println("chosen " + best.toString()
-				+ "current heuristic value: " + currentHeuristicValue);
+//		currentHeuristicValue += best.getWorth();
+//		System.out.println("chosen " + best.toString()
+//				+ "current heuristic value: " + currentHeuristicValue);
 		return best.getTowerCoordinates();
 	}
 
-	private BoardState getGreedyRoot(int availableTowers) {
-		final PathHeuristic greedyHeu = new PathHeuristic();
-		List<Point> l = new ArrayList<>();
-		for (Point p : game)
-			l.add(p);
-		Comparator<Point> comareByHeuristics = new Comparator<Point>() {
-
-			@Override
-			public int compare(Point p1, Point p2) {
-				return greedyHeu.pathIntersections(p2, game)
-						- greedyHeu.pathIntersections(p1, game);
-			}
-		};
-		Collections.sort(l, comareByHeuristics);
-		List<Point> best = l.subList(0, availableTowers);
-		return new BoardState(best, h, game);
-	}
-
 	private void startLevel() {
-		currentHeuristicValue = 0.0;
+//		currentHeuristicValue = 0.0;
 		game.initializeLevel(level, gui_conf.frameSize.width,
 				gui_conf.frameSize.height - 20);
 
