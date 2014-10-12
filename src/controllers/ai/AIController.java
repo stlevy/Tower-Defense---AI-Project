@@ -92,7 +92,6 @@ public class AIController implements Runnable {
 //		currentHeuristicValue = 0.0;
 		game.initializeLevel(level, gameWidth, gameHeight);
 		writer.initializeLevel(level);
-		System.out.println("starting level " + level);
 	}
 
 	private void endGame() {
