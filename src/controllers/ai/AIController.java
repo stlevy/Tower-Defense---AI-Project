@@ -75,14 +75,10 @@ public class AIController implements Runnable {
 
 	private List<Point> AISearch(int availableTowers) {
 		BoardState root = new BoardState(availableTowers, h, game);
-		// System.out.print("Searching...");
 		BoardState best = algorithm.search(root);
-		// System.out.println("node count:" + algorithm.getExpendedNodes());
 		algorithm.reset();
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
-		System.out.println("chosen: " + best.toString()
-				+ " current heuristic value: " + best.getWorth());
 		return best.getTowerCoordinates();
 	}
 
