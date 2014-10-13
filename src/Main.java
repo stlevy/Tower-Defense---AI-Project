@@ -12,6 +12,7 @@ import ai.algorithms.BeamSearchPrioriryQueue;
 import ai.heuristics.Heuristic;
 import ai.heuristics.LevelsHeuristic;
 import ai.heuristics.PathHeuristic;
+import ai.heuristics.ProductHeuristic;
 import ai.heuristics.WeightedHeuristics;
 import ai.nodes.BoardState;
 import ai.utils.ResultsWriter;
@@ -44,7 +45,11 @@ public class Main {
 		// Heuristic function
 		Heuristic bonus = new LevelsHeuristic();
 		Heuristic path = new PathHeuristic();
-		Heuristic h = new WeightedHeuristics(server, path, bonus, alpha);
+		Heuristic h;
+		if ( alpha != 2)
+			h = new WeightedHeuristics(server, path, bonus, alpha);
+		else
+			h = new ProductHeuristic(server, path, bonus); 
 
 		// Results Writer
 		ResultsWriter text_viewer = new ResultsWriter(
