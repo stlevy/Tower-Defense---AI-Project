@@ -1,16 +1,16 @@
 package logic;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import utils.TimeFrame;
 
 /**
- * manages the tower logical unit:
- * 	the tower's level
- * 	the tower's damage calculation
- * 	the tower's aiming and firing
+ * manages the tower logical unit: the tower's level the tower's damage
+ * calculation the tower's aiming and firing
+ * 
  * @author Tomer
- *
+ * 
  */
 public class Tower extends Rectangle {
 	private final TimeFrame firingFrame;
@@ -23,11 +23,13 @@ public class Tower extends Rectangle {
 	private int level;
 	private final int bonusPrecentage;
 
-	public Tower(Rectangle containing, int range, int firing_speed,
-			double initial_damage,int bonus) {
+	private final Point mapLocation;
 
+	public Tower(Rectangle containing, Point location, int range,
+			int firing_speed, double initial_damage, int bonus) {
 		setBounds(containing.x, containing.y, containing.width,
 				containing.height);
+		mapLocation = location;
 		towerRange = new Rectangle(x - range / 2, y - range / 2,
 				containing.width + range, containing.height + range);
 		firingFrame = new TimeFrame(firing_speed);
@@ -108,15 +110,20 @@ public class Tower extends Rectangle {
 		return (Rectangle) aimedMob.clone();
 	}
 
-	public void levelUp(){
-		level ++;
+	public void levelUp() {
+		level++;
 	}
-	
-	public int getLevel(){
+
+	public int getLevel() {
 		return level;
 	}
-	
+
+	public Point getMapLocation() {
+		return mapLocation;
+	}
+
 	private double calculateDamage() {
-		return initialDamage + initialDamage * (bonusPrecentage * level / 100.0);
+		return initialDamage + initialDamage
+				* (bonusPrecentage * level / 100.0);
 	}
 }

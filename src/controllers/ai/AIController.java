@@ -29,7 +29,6 @@ public class AIController implements Runnable {
 	private ResultsWriter writer;
 
 	private Heuristic h;
-//	private double currentHeuristicValue;
 
 	private final GameConfiguration conf;
 	private final int gameWidth, gameHeight;
@@ -60,7 +59,7 @@ public class AIController implements Runnable {
 				if (availableItemsToBuy > 0) {
 					for (Point towerCoords : AISearch(availableItemsToBuy)) {
 						game.buyTower(towerCoords, 0);
-						 writer.buyTower(towerCoords, 0);
+						writer.buyTower(towerCoords, 0);
 					}
 				}
 				game.gamePhysics();
@@ -82,14 +81,12 @@ public class AIController implements Runnable {
 		algorithm.reset();
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
-		// currentHeuristicValue += best.getWorth();
-		// System.out.println("chosen: " + best.toString()
-		// + "current heuristic value: " + currentHeuristicValue);
+		System.out.println("chosen: " + best.toString()
+				+ " current heuristic value: " + best.getWorth());
 		return best.getTowerCoordinates();
 	}
 
 	private void startLevel() {
-//		currentHeuristicValue = 0.0;
 		game.initializeLevel(level, gameWidth, gameHeight);
 		writer.initializeLevel(level);
 	}

@@ -121,7 +121,7 @@ public class GameModel implements Game {
 			throw new IllegalStateException("can't build there"
 					+ roomCoord.toString());
 		money -= conf.prices[itemHolds];
-		Tower newTower = towerFactory.create(room.blockGetRect(roomCoord));
+		Tower newTower = towerFactory.create(room.blockGetRect(roomCoord),roomCoord);
 		towers.add(newTower);
 		room.blockSetTower(roomCoord, newTower);
 		updateNeighborTowers(roomCoord, newTower);

@@ -1,5 +1,6 @@
 package logic.factories;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import logic.Tower;
@@ -12,10 +13,10 @@ public class TowerFactory {
 	private int range;
 	private int bonus;
 
-	public Tower create(Rectangle rect) {
+	public Tower create(Rectangle rect,Point location) {
 		if (!configured)
 			throw new IllegalStateException("Tower factory is not configured");
-		return new Tower(rect, range, speed, initialDamage, bonus);
+		return new Tower(rect, location,range, speed, initialDamage, bonus);
 	}
 
 	public void configureFactory(int firing_speed, double initial_damage,

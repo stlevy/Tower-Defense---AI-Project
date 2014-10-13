@@ -1,8 +1,10 @@
 package ai.heuristics;
 
 import java.awt.Point;
+import java.util.List;
 
 import logic.Game;
+import logic.Tower;
 import utils.GameUtils.TILE_TYPE;
 import ai.nodes.AbstractState;
 import ai.nodes.BoardState;
@@ -20,23 +22,24 @@ public class PathHeuristic implements Heuristic {
 	public double getHeuristicValue(AbstractState node,Game game) {
 		if (node == null || !(node instanceof BoardState))
 			throw new IllegalArgumentException("node is illegal");
-
 		BoardState s = (BoardState) node;
+		List<Point> towerCoordinates = s.getTowerCoordinates();
+		// check that the node is legal
+		for (Point coord: towerCoordinates)
+			if (game.hasTower(coord)
+				|| game.getBlockType(coord) != TILE_TYPE.GROUND)
+			return -1;
+		for ( Tower t : game.getTowers())
+			towerCoordinates.add(t.getMapLocation());
+		
 		int pathIntersecionsSum = 0;
-		for (Point towerCoord : s.getTowerCoordinates()) {
-			int intersects = pathIntersections(towerCoord,game);
-			if (intersects < 0)
-				return -1;
-			pathIntersecionsSum += intersects;
-		}
+		for (Point towerCoord : towerCoordinates) 
+			pathIntersecionsSum += pathIntersections(towerCoord,game);
+		
 		return pathIntersecionsSum;
 	}
 
 	public int pathIntersections(Point coord, Game game) {
-		if (game.hasTower(coord)
-				|| game.getBlockType(coord) != TILE_TYPE.GROUND)
-			return -1;
-
 		int path_intersections = 0;
 		for (int deltaX = -1; deltaX < 2; deltaX++) {
 			for (int deltaY = -1; deltaY < 2; deltaY++) {

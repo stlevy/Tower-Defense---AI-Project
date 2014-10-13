@@ -32,7 +32,6 @@ public class CombinedController implements Runnable {
 
 	private final AnytimeAlgorithm<BoardState> algorithm;
 	private final Heuristic h;
-//	private double currentHeuristicValue;
 	private final ResultsWriter writer;
 	private final GameConfiguration conf;
 	private final GUIConfiguration gui_conf;
@@ -94,14 +93,12 @@ public class CombinedController implements Runnable {
 		algorithm.reset();
 		if (best == null || best.getWorth() < 0)
 			return new ArrayList<Point>();
-//		currentHeuristicValue += best.getWorth();
-//		System.out.println("chosen " + best.toString()
-//				+ "current heuristic value: " + currentHeuristicValue);
+		System.out.println("chosen " + best.toString()
+				+ " current heuristic value: " + best.getWorth());
 		return best.getTowerCoordinates();
 	}
 
 	private void startLevel() {
-//		currentHeuristicValue = 0.0;
 		game.initializeLevel(level, gui_conf.frameSize.width,
 				gui_conf.frameSize.height - 20);
 
