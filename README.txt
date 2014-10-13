@@ -30,9 +30,13 @@ t :
 	the algorithm will stop after t milliseconds and return the best state it found (anytime algorithm)
 w : 
 	the width of the beam in the "beam search" algorithm
-alpha : where 0<=alpha<=1
-	the algorithms has 2 heuristics 
+
+the algorithms has 2 heuristics 
 		- "Path heuristics" - maximizes the amount of path seen by the towers
 		- "Tower heuristics" - maximizes the "effective levels" of the towers,
 			where "effective level" is the level of the tower that SEES some path.
-		the heuristics the game runs is (alpha*PathHeuristics) + ((1-alpha) * TowerHeuristics)   
+alpha : if 0<=alpha<=1:
+		the heuristics the game runs is (alpha*PathHeuristics) + ((1-alpha) * TowerHeuristics)
+	
+		if alpha == 2: 
+		the heuristics the game runs is PathHeuristics* TowerHeuristics
