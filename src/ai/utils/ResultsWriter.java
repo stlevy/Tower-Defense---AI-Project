@@ -71,7 +71,7 @@ public class ResultsWriter {
 		sumSpawned += numberofMobs;
 		writeCSVvalue(df.format(killedMobs / (float) numberofMobs));
 		if (level == levels)
-			writeCSVvalue(df.format(sumKilled / (float) sumSpawned));
+			System.out.println("level "+level+" score:"+df.format(sumKilled / (float) sumSpawned));
 	}
 
 	private void writeCSVvalue(String s) {
