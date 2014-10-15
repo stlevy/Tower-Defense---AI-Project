@@ -1,49 +1,64 @@
 import os
-algo_running_time = 1000 
-beam_width = 100
-const_alpha = 0.5
-gui = False
-	
-def alpha_experiment():
+redos_number = 4
+width_list = [1,2,5,10,20,30,40,50,100,200,300,500,1000]
+time_list = [10,20,30,40,50,100,200,300,500,1000,2000,3000,4000,5000,7500,10000,20000,50000,100000]
+alpha_list = [x/100.0 for x in range(0,101)]
+
+def alpha_experiment(t,width):
 	print '***************ALPHA EXPERIMENTS***************'
-	for raw_alpha in range(0,101):
-		alpha = float(raw_alpha) / 100.0
-		print '\n\nrunning for alpha = %.2f\n\n' %(alpha,)
-		if gui:
-			os.system('java -jar game.jar gui %d %d %.2f' %(algo_running_time, beam_width, alpha) )
-		else:
-			os.system('java -jar game.jar ai %d %d %.2f' %(algo_running_time, beam_width, alpha) )
+	for i in range(redos_number):
+		for raw_alpha in alpha_list:
+			alpha = float(raw_alpha) / 100.0
+			print '\n\nrunning for alpha = %.2f\n\n' %(alpha,)
+			os.system('java -jar game.jar ai %d %d %.2f' %(t, width, alpha) )
 
 			
-def width_experiment():
+def width_experiment(alpha,t):
 	print '***************WIDTH EXPERIMENTS***************'
-	width_list = [1,2,5,10,20,30,40,50,100,200,300,500,1000]
-	for width in width_list:
-		print '\n\nrunning for width = %.2f\n\n' %(width,)
-		if gui:
-			os.system('java -jar game.jar gui %d %d %.2f' %(algo_running_time, width, const_alpha) )
-		else:
-			os.system('java -jar game.jar ai %d %d %.2f' %(algo_running_time, width, const_alpha) )
+	for i in range(redos_number):
+		
+		for width in width_list:
+			print '\n\nrunning for width = %.2f\n\n' %(width,)
+			os.system('java -jar game.jar ai %d %d %.2f' %(t, width, alpha) )
 
-def time_experiment():
+def time_experiment(alpha,width):
 	print '***************TIME EXPERIMENTS***************'
-	time_list = [10,20,30,40,50,100,200,300,500,1000,2000,3000,4000,5000,7500,10000]
-	for t in time_list:
-		print '\n\nrunning for time = %.2f\n\n' %(t,)
-		if gui:
-			os.system('java -jar game.jar gui %d %d %.2f' %(t, beam_width, const_alpha) )
-		else:
-			os.system('java -jar game.jar ai %d %d %.2f' %(t, beam_width, const_alpha) )
+	for i in range(redos_number):
+		for t in time_list:
+			print '\n\nrunning for time = %.2f\n\n' %(t,)
+			os.system('java -jar game.jar ai %d %d %.2f' %(t, width, alpha) )
+			
 
 def seperator(str):
 	f = open('Results/results.csv','at')
 	f.write('%s\n' %(str,))
-	f.close()
+	f.close()	
 	
+def experiment1():
+	alpha_experiment(1000,100)
+	
+def experiment2():
+	for alpha in [0,0.5,1,2]: 
+		seperator('time')
+		time_experiment(alpha,100)	
+		
+def experiment3():
+	for alpha in [0,0.5,1,2]: 
+		seperator('width')
+		width_experiment(alpha,1000)	
+		
+def experiment4():
+	for alpha in [0,0.5,1,2]: 
+		seperator('width with long time')
+		width_experiment(alpha,10000)	
+
+def experiment5(): 
+	seperator('width with very long time')
+	width_experiment(2,1000000)	
+
 if __name__ == '__main__':
-	seperator('alpha')
-	alpha_experiment()
-	seperator('width')
-	width_experiment()
-	seperator('time')
-	time_experiment()
+	# experiment1()
+	# experiment2()
+	# experiment3()
+	# experiment4()
+	# experiment5()
