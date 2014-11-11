@@ -36,6 +36,7 @@ public class Mob extends Rectangle {
 		roomEntryPoint = entryPoint;
 		walkSpeed = new TimeFrame(mobSpeed);
 		blockCounter = new TimeFrame(mobSize - 1);
+		// New mobs branch test
 		
 	}
 
