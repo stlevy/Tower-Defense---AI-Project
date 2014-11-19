@@ -23,7 +23,7 @@ public class Mob extends Rectangle {
 	private double health;
 	private final int maxHealth;
 
-	// movement fields
+	// movement fields 
 	private Direction direction = Direction.no_direction;
 
 	private final TimeFrame walkSpeed;
