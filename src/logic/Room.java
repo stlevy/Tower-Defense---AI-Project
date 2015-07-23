@@ -19,25 +19,25 @@ import utils.GameUtils.TILE_TYPE;
 public class Room extends Rectangle implements Iterable<Point> {
 
 	protected final int blockSize;
-	private Point entryPoint;
+	private final Point entryPoint;
 	protected final Block[][] blocks;
 	private final int roomWidth;
 	private final int roomHeight;
 
-	public Room(int _roomWidth, int _roomHeight, int _blockSize,
-			Point _basePoint, File level) {
+	public Room(final int _roomWidth, final int _roomHeight, final int _blockSize,
+			final Point _basePoint, final File level) {
 		roomWidth = _roomWidth;
 		roomHeight = _roomHeight;
 		setBounds(_basePoint.x, _basePoint.y, roomWidth * _blockSize,
-				roomHeight * _blockSize);
+			roomHeight * _blockSize);
 
 		blocks = new Block[roomHeight][roomWidth];
 
 		blockSize = _blockSize;
-		loadMap(level);
+		entryPoint = loadMap(level);
 	}
 
-	private void loadMap(File level) {
+	private Point loadMap(final File level) {
 		Scanner scanner = null;
 
 		try {
@@ -47,14 +47,15 @@ public class Room extends Rectangle implements Iterable<Point> {
 			System.exit(-1);
 		}
 
+		Point entryPoint = null;
 		for (int row = 0; row < roomHeight; row++) {
 			for (int col = 0; col < roomWidth; col++) {
 				if (!scanner.hasNext())
 					throw new IllegalArgumentException(
 							"given text file too small");
 				blocks[row][col] = new Block(x + (col * blockSize), y
-						+ (row * blockSize), blockSize, blockSize,
-						scanner.nextInt());
+					+ (row * blockSize), blockSize, blockSize,
+					scanner.nextInt());
 			}
 			if (entryPoint == null
 					&& blocks[row][0].getType() == TILE_TYPE.PATH)
@@ -68,25 +69,26 @@ public class Room extends Rectangle implements Iterable<Point> {
 			throw new IllegalArgumentException("Map too big");
 
 		scanner.close();
+		return entryPoint;
 	}
 
-	public TILE_TYPE getBlockType(Point coord) {
+	public TILE_TYPE getBlockType(final Point coord) {
 		if (!pointInRoom(coord))
 			return TILE_TYPE.EMPTY;
 		return getBlock(coord).getType();
 	}
 
-	public boolean blockHasTower(Point coord) {
+	public boolean blockHasTower(final Point coord) {
 		if (!pointInRoom(coord))
 			return false;
 		return getBlock(coord).hasTower();
 	}
 
-	public void blockSetTower(Point coord, Tower tower) {
+	public void blockSetTower(final Point coord, final Tower tower) {
 		getBlock(coord).setTower(tower);
 	}
 
-	public Tower blockGetTower(Point coord) {
+	public Tower blockGetTower(final Point coord) {
 		return getBlock(coord).getTower();
 	}
 
@@ -94,11 +96,11 @@ public class Room extends Rectangle implements Iterable<Point> {
 		return entryPoint;
 	}
 
-	public Rectangle blockGetRect(Point coord) {
+	public Rectangle blockGetRect(final Point coord) {
 		return getBlock(coord);
 	}
 
-	private Block getBlock(Point coord) {
+	private Block getBlock(final Point coord) {
 		if (!pointInRoom(coord))
 			throw new IllegalArgumentException("Point not in the room");
 		return blocks[coord.y][coord.x];
@@ -134,15 +136,15 @@ public class Room extends Rectangle implements Iterable<Point> {
 		};
 	}
 
-	public int getXCoord(int _x) {
+	public int getXCoord(final int _x) {
 		return (_x - x) / blockSize;
 	}
 
-	public int getYCoord(int _y) {
+	public int getYCoord(final int _y) {
 		return (_y - y) / blockSize;
 	}
 
-	public boolean blockWalkable(Point p) {
+	public boolean blockWalkable(final Point p) {
 		switch (getBlockType(p)) {
 		case PATH:
 		case END:
@@ -156,7 +158,7 @@ public class Room extends Rectangle implements Iterable<Point> {
 		}
 	}
 
-	public boolean pointInRoom(Point p) {
+	public boolean pointInRoom(final Point p) {
 		return p.x >= 0 && p.x < roomWidth && p.y >= 0 && p.y < roomHeight;
 	}
 }
