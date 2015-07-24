@@ -2,7 +2,15 @@ import os
 redos_number = 4
 width_list = [1,2,5,10,20,30,40,50,100,200,300,500,1000]
 time_list = [10,20,30,40,50,100,200,300,500,1000,2000,3000,4000,5000,7500,10000,20000,50000,100000]
-alpha_list = [x/100.0 for x in range(0,101)]
+alpha__beta_gamma_list = []
+for alpha in range(0,11):
+	for beta in range(0,11):
+		if alpha+beta <= 10:
+			alpha__beta_gamma_list.append((alpha/10.0,beta/10.0,(10-alpha-beta)/10.0))
+		
+for alpha,beta,gamma in alpha__beta_gamma_list:
+	print alpha,beta,gamma
+print len(alpha__beta_gamma_list)
 
 def alpha_experiment(t,width):
 	print '***************ALPHA EXPERIMENTS***************'
@@ -57,6 +65,7 @@ def experiment5():
 	width_experiment(2,1000000)	
 
 if __name__ == '__main__':
+	pass
 	# experiment1()
 	# experiment2()
 	# experiment3()

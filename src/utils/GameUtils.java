@@ -7,8 +7,8 @@ package utils;
  */
 public class GameUtils {
 	public static enum Direction{
-		right , left, upward, downward, no_direction;
-		
+		right, left, upward, downward, no_direction;
+
 		public Direction opposite(){
 			switch (this) {
 			case downward:
@@ -24,12 +24,18 @@ public class GameUtils {
 				return no_direction;
 			}
 		}
+
+		@Override
+		public String toString() {
+			return this.name();
+		}
+
 	}
 
 	public static enum TILE_TYPE {
 		GROUND, PATH , END , EMPTY
 	}
-	
+
 	public static enum ITEM_TYPE {
 		EMPTY,TOWER1
 	}

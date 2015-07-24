@@ -2,6 +2,7 @@ package logic;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Iterator;
 
 import utils.GameUtils.Direction;
 import utils.GameUtils.TILE_TYPE;
@@ -24,28 +25,29 @@ public class Mob extends Rectangle {
 	private final int maxHealth;
 
 	// movement fields 
-	private Direction direction = Direction.no_direction;
+	private Direction direction;
 
 	private final TimeFrame walkSpeed;
 
 	private final TimeFrame blockCounter;
+	private Iterator<Direction> directions;
 
-	public Mob(Point entryPoint, int maxHealth, int mobSpeed,int mobSize) {
+	public Mob(final Point entryPoint, final int maxHealth, final int mobSpeed, final int mobSize) {
 		this.maxHealth = maxHealth;
 		this.mobSize = mobSize;
+
 		roomEntryPoint = entryPoint;
 		walkSpeed = new TimeFrame(mobSpeed);
 		blockCounter = new TimeFrame(mobSize - 1);
-		// New mobs branch test
-		
 	}
 
-	public void spawnMob() {
+	public void spawnMob(final Path path) {
+		this.directions = path.iterator();
 		health = maxHealth;
 		setBounds(roomEntryPoint.x, roomEntryPoint.y, mobSize, mobSize);
 		walkSpeed.reset();
 		blockCounter.reset();
-		direction = Direction.no_direction;
+		direction = directions.next();
 		inGame = true;
 	}
 
@@ -55,7 +57,7 @@ public class Mob extends Rectangle {
 	 * @param room
 	 *            - the room in which we walk in.
 	 */
-	public void physics(Room room) {
+	public void physics(final Room room) {
 		if (!walkSpeed.tick()) {
 			return;
 		}
@@ -66,56 +68,25 @@ public class Mob extends Rectangle {
 			return;
 		}
 
-		if (!collision(room)) {
-			return; // continue walking
+		if (directions.hasNext()){
+			direction = directions.next();
+			return;
 		}
 
-		// collide in next step ... reRout
-
-		int xCoord = room.getXCoord(x);
-		int yCoord = room.getYCoord(y);
-
-		direction = getNewDirection(room, xCoord, yCoord);
-	}
-
-	private Direction getNewDirection(Room room, int xCoord, int yCoord) {
-		Point downPoint = new Point(xCoord, yCoord + 1);
-		if ( checkDirection(downPoint, Direction.downward, room) )
-			return Direction.downward;
-			
-		Point upPoint = new Point(xCoord, yCoord - 1);
-		if ( checkDirection(upPoint, Direction.upward, room) )
-			return Direction.upward;
-
-		Point rightPoint = new Point(xCoord + 1, yCoord);
-		if ( checkDirection(rightPoint, Direction.right, room) )
-			return Direction.right;
-
-		Point leftPoint = new Point(xCoord - 1, yCoord);
-		if ( checkDirection(leftPoint, Direction.left, room) )
-			return Direction.left;
-
-
-		Point thePoint = new Point(xCoord, yCoord);
-		if (room.getBlockType(thePoint) != TILE_TYPE.END) {
+		if (legalEnd(room))
 			throw new IllegalStateException("Map unpassable");
-		}
-		
+
 		// finished the map
 		inGame = false;
-		return direction;
+	}
+
+	public boolean legalEnd(final Room room) {
+		Point thePoint = new Point(room.getXCoord(x), room.getYCoord(y));
+		return room.getBlockType(thePoint) != TILE_TYPE.END;
 
 	}
 
-	private boolean checkDirection(Point p, Direction d, Room room) {
-		return direction != d.opposite() && room.pointInRoom(p)
-				&& room.blockWalkable(p);
-	}
-
-	private void updateLocation(Room room) {
-		if (direction == Direction.no_direction)
-			direction = getNewDirection(room, room.getXCoord(x),
-					room.getYCoord(y));
+	private void updateLocation(final Room room) {
 		switch (direction) {
 		case right:
 			x++;
@@ -136,27 +107,12 @@ public class Mob extends Rectangle {
 	}
 
 	/**
-	 * checks whether we are going to collide in a wall in the next step
-	 * 
-	 * @param room
-	 *            - the room in which we walk
-	 * @return true if we are going to collide , false otherwise.
-	 */
-	private boolean collision(Room room) {
-		int nextX = room.getXCoord(x) + deltaXCoord(room);
-		int nextY = room.getYCoord(y) + deltaYCoord(room);
-		Point nextCoord = new Point(nextX, nextY);
-		return (!room.pointInRoom(nextCoord))
-				|| (room.getBlockType(nextCoord) == TILE_TYPE.GROUND);
-	}
-
-	/**
 	 * hit the mob with i hit points
 	 * 
 	 * @param damage
 	 * @return
 	 */
-	public void hit(double damage) {
+	public void hit(final double damage) {
 		health -= damage;
 		if (health <= 0)
 			inGame = false;
@@ -164,22 +120,6 @@ public class Mob extends Rectangle {
 
 	public double getHealth() {
 		return health;
-	}
-
-	private int deltaXCoord(Room room) {
-		if (direction == Direction.right)
-			return 1;
-		if (direction == Direction.left)
-			return -1;
-		return 0;
-	}
-
-	private int deltaYCoord(Room room) {
-		if (direction == Direction.downward)
-			return 1;
-		if (direction == Direction.upward)
-			return -1;
-		return 0;
 	}
 
 	public void kill() {

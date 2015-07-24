@@ -36,10 +36,10 @@ public class GameModel implements Game {
 	private int killedMobs;
 	private int passedMobs;
 
-	private GameConfiguration conf;
+	private final GameConfiguration conf;
 
-	public GameModel(MobFactory mFact, TowerFactory tFact,
-			GameConfiguration conf) throws IOException {
+	public GameModel(final MobFactory mFact, final TowerFactory tFact,
+			final GameConfiguration conf) throws IOException {
 		mobFactory = mFact;
 		towerFactory = tFact;
 		this.conf = conf;
@@ -47,11 +47,11 @@ public class GameModel implements Game {
 	}
 
 	@Override
-	public void initializeLevel(int level, int gameWidth, int gameHeight) {
+	public void initializeLevel(final int level, final int gameWidth, final int gameHeight) {
 		initializeRoom(level, gameWidth, gameHeight);
 		initializeMobs(level, gameWidth, gameHeight);
 		initializeTowers(level, gameWidth, gameHeight);
-		mobSpawner = new MobSpawner(conf.spawnTime);
+		mobSpawner = new MobSpawner(conf.spawnTime, room);
 		money = conf.initialMoney;
 		health = conf.initialHealth;
 		killedMobs = 0;
@@ -60,27 +60,27 @@ public class GameModel implements Game {
 
 	private void configureFactories() {
 		mobFactory.configureFactory(conf.mobHealth, conf.mobSpeed,
-				conf.blockSize);
+			conf.blockSize);
 		towerFactory.configureFactory(conf.firingSpeed, conf.initialDamage,
-				conf.towerRange, conf.levelUpBonus);
+			conf.towerRange, conf.levelUpBonus);
 	}
 
-	private void initializeTowers(int level, int gameWidth, int gameHeight) {
+	private void initializeTowers(final int level, final int gameWidth, final int gameHeight) {
 		towers = new ArrayList<Tower>();
 	}
 
-	private void initializeRoom(int level, int gameWidth, int gameHeight) {
+	private void initializeRoom(final int level, final int gameWidth, final int gameHeight) {
 		int initialX = (gameWidth / 2) - (conf.roomWidth * conf.blockSize / 2);
 		int initialY = (gameHeight / 2)
 				- (conf.roomHeight * conf.blockSize / 2);
 		initialRoomPoint = new Point(initialX, initialY);
 		room = new Room(conf.roomWidth, conf.roomHeight, conf.blockSize,
-				initialRoomPoint, new File("Levels/level" + level + ".txt"));
+			initialRoomPoint, new File("Levels/level" + level + ".txt"));
 		roomEntryPoint = room.getEntryPoint();
 
 	}
 
-	private void initializeMobs(int level, int gameWidth, int gameHeight) {
+	private void initializeMobs(final int level, final int gameWidth, final int gameHeight) {
 		mobs = mobFactory.createArray(conf.numberOfMobs);
 
 		for (int i = 0; i < mobs.length; i++) {
@@ -109,7 +109,7 @@ public class GameModel implements Game {
 	}
 
 	@Override
-	public void buyTower(Point roomCoord, int itemHolds) {
+	public void buyTower(final Point roomCoord, final int itemHolds) {
 		// check if we have enough money
 		if (availableItemsToBuy(itemHolds) == 0)
 			throw new IllegalStateException("Not enough money to buy index "
@@ -127,7 +127,8 @@ public class GameModel implements Game {
 		updateNeighborTowers(roomCoord, newTower);
 	}
 
-	public boolean towerSeesPath(Point towerCoord) {
+	@Override
+	public boolean towerSeesPath(final Point towerCoord) {
 		boolean seesPath = false;
 		for (int deltaX = -1; deltaX < 2; deltaX++) {
 			for (int deltaY = -1; deltaY < 2; deltaY++) {
@@ -135,7 +136,7 @@ public class GameModel implements Game {
 					continue;
 
 				Point neighbor = new Point(towerCoord.x + deltaX, towerCoord.y
-						+ deltaY);
+					+ deltaY);
 				if (getBlockType(neighbor) == TILE_TYPE.PATH)
 					seesPath = true;
 			}
@@ -143,13 +144,13 @@ public class GameModel implements Game {
 		return seesPath;
 	}
 
-	private void updateNeighborTowers(Point roomCoord, Tower tower) {
+	private void updateNeighborTowers(final Point roomCoord, final Tower tower) {
 		for (int deltaX = -1; deltaX < 2; deltaX++) {
 			for (int deltaY = -1; deltaY < 2; deltaY++) {
 				if (deltaX == 0 && deltaY == 0)
 					continue;
 				Point neighbor = new Point(roomCoord.x + deltaX, roomCoord.y
-						+ deltaY);
+					+ deltaY);
 				if (pointInRoom(neighbor) && hasTower(neighbor)) {
 					// level the neighbor up
 					room.blockGetTower(neighbor).levelUp();
@@ -196,19 +197,19 @@ public class GameModel implements Game {
 	}
 
 	@Override
-	public int availableItemsToBuy(int index) {
+	public int availableItemsToBuy(final int index) {
 		if (conf.prices[index] == 0)
 			return 1;
 		return money / conf.prices[index];
 	}
 
 	@Override
-	public TILE_TYPE getBlockType(Point coord) {
+	public TILE_TYPE getBlockType(final Point coord) {
 		return room.getBlockType(coord);
 	}
 
 	@Override
-	public boolean hasTower(Point coord) {
+	public boolean hasTower(final Point coord) {
 		return room.blockHasTower(coord);
 	}
 
@@ -222,7 +223,7 @@ public class GameModel implements Game {
 		return killedMobs;
 	}
 
-	public boolean pointInRoom(Point p) {
+	public boolean pointInRoom(final Point p) {
 		return room.pointInRoom(p);
 	}
 

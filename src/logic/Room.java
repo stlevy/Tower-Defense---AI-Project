@@ -4,9 +4,15 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
+import logic.Path.PathBuilder;
+import utils.GameUtils.Direction;
 import utils.GameUtils.TILE_TYPE;
 
 /**
@@ -18,11 +24,13 @@ import utils.GameUtils.TILE_TYPE;
  */
 public class Room extends Rectangle implements Iterable<Point> {
 
+	private static final Random RANDOM = new Random(System.currentTimeMillis());
 	protected final int blockSize;
 	private final Point entryPoint;
 	protected final Block[][] blocks;
 	private final int roomWidth;
 	private final int roomHeight;
+	private final Set<Path> paths;
 
 	public Room(final int _roomWidth, final int _roomHeight, final int _blockSize,
 			final Point _basePoint, final File level) {
@@ -35,7 +43,9 @@ public class Room extends Rectangle implements Iterable<Point> {
 
 		blockSize = _blockSize;
 		entryPoint = loadMap(level);
+		paths = AnalyzePaths();
 	}
+
 
 	private Point loadMap(final File level) {
 		Scanner scanner = null;
@@ -58,8 +68,9 @@ public class Room extends Rectangle implements Iterable<Point> {
 					scanner.nextInt());
 			}
 			if (entryPoint == null
-					&& blocks[row][0].getType() == TILE_TYPE.PATH)
+					&& blocks[row][0].getType() == TILE_TYPE.PATH) {
 				entryPoint = new Point(blocks[row][0].x, blocks[row][0].y);
+			}
 		}
 		if (entryPoint == null)
 			throw new IllegalArgumentException(
@@ -70,6 +81,60 @@ public class Room extends Rectangle implements Iterable<Point> {
 
 		scanner.close();
 		return entryPoint;
+	}
+
+	private static Point getNextPoint(final Point prev, final Direction d) {
+		int newX=prev.x,newY=prev.y;
+		switch (d){
+		case downward:
+			newY++;
+			break;
+		case upward:
+			newY--;
+			break;
+		case left:
+			newX--;
+			break;
+		case right:
+			newX++;
+			break;
+		case no_direction:
+		default:
+			break;
+		}
+		return new Point(newX,newY);
+	}
+
+	/**
+	 * @return all the paths in the map
+	 */
+	private Set<Path> AnalyzePaths() {
+		int row = 0;
+		for (; blocks[row][0].getType() != TILE_TYPE.PATH; row++)
+			;
+		Point startCoord = new Point(0, row);
+		return AnalyzePaths_recursive(startCoord, startCoord);
+	}
+
+	private Set<Path> AnalyzePaths_recursive(final Point prevPoint, final Point currentPoint) {
+		HashSet<Path> $ = new HashSet<>();
+		Set<Direction> walkableDirections = getWalkableDirections(prevPoint, currentPoint);
+		if (walkableDirections.isEmpty() && getBlockType(currentPoint) == TILE_TYPE.END)
+			$.add(new Path());
+		for (Direction d : walkableDirections)
+			for (Path p : AnalyzePaths_recursive(currentPoint, getNextPoint(currentPoint, d)))
+				$.add(new PathBuilder().addTurn(d).concat(p).build());
+		return $;
+	}
+
+	public Set<Direction> getWalkableDirections(final Point prevPoint, final Point currentPoint) {
+		Set<Direction> walkableDirections = new HashSet<>();
+		Arrays.asList(Direction.values()).forEach(d -> {
+			final Point nextPoint = getNextPoint(currentPoint, d);
+			if (d != Direction.no_direction && blockWalkable(nextPoint) && (!nextPoint.equals(prevPoint)))
+				walkableDirections.add(d);
+		});
+		return walkableDirections;
 	}
 
 	public TILE_TYPE getBlockType(final Point coord) {
@@ -161,4 +226,10 @@ public class Room extends Rectangle implements Iterable<Point> {
 	public boolean pointInRoom(final Point p) {
 		return p.x >= 0 && p.x < roomWidth && p.y >= 0 && p.y < roomHeight;
 	}
+
+	public Path getRandomPath() {
+		int size = paths.size();
+		return paths.toArray(new Path[size])[RANDOM.nextInt(size)];
+	}
+
 }
