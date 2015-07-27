@@ -1,12 +1,5 @@
-import gui.GUIConfiguration;
-
 import java.io.IOException;
 
-import logic.Game;
-import logic.GameModel;
-import logic.factories.MobFactory;
-import logic.factories.TowerFactory;
-import utils.GameConfiguration;
 import ai.algorithms.AnytimeAlgorithm;
 import ai.algorithms.BeamSearchPrioriryQueue;
 import ai.heuristics.Heuristic;
@@ -19,16 +12,22 @@ import ai.utils.ResultsWriter;
 import controllers.CombinedController;
 import controllers.ai.AIController;
 import controllers.gui.GUIController;
+import gui.GUIConfiguration;
+import logic.Game;
+import logic.GameModel;
+import logic.factories.MobFactory;
+import logic.factories.TowerFactory;
+import utils.GameConfiguration;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
+	public static void main(final String[] args) throws IOException {
 		// in ai+gui mode the game runs twice as fast, in ai mode, 4 times faster 
 		int speedFactor = getSpeedFactor(args[0]);
-		
+
 		GUIConfiguration guiConf = new GUIConfiguration();
-		
+
 		Game server = new GameModel(new MobFactory(), new TowerFactory(),
-				new GameConfiguration(speedFactor));
+			new GameConfiguration(speedFactor));
 		//HUMAN mode
 		if (args[0].equals("human")) {
 			guiNoAI(server, guiConf);
@@ -53,9 +52,9 @@ public class Main {
 
 		// Results Writer
 		ResultsWriter text_viewer = new ResultsWriter(
-				server.getConfiguration().numberOfLevels, runningTime,
-				beamSize, alpha);
-		
+			server.getConfiguration().numberOfLevels, runningTime,
+			beamSize, alpha);
+
 		//AI + GUI
 		if (args[0].equals("gui")) {
 			guiAI(server, text_viewer, algo, h, guiConf);
@@ -69,34 +68,34 @@ public class Main {
 		throw new IllegalArgumentException("args[0] was not a valid argument");
 	}
 
-	private static int getSpeedFactor(String mode) {
+	private static int getSpeedFactor(final String mode) {
 		if (mode.equals("human"))
 			return 1;
 		if (mode.equals("gui"))
-			return 2;
-		if (mode.equals("ai"))
 			return 4;
+		if (mode.equals("ai"))
+			return 16;
 		return -1;
 	}
 
-	private static void guiAI(Game server, ResultsWriter text_viewer,
-			AnytimeAlgorithm<BoardState> algo, Heuristic h,
-			GUIConfiguration guiConf) {
+	private static void guiAI(final Game server, final ResultsWriter text_viewer,
+			final AnytimeAlgorithm<BoardState> algo, final Heuristic h,
+			final GUIConfiguration guiConf) {
 		CombinedController controller = new CombinedController(server,
-				text_viewer, algo, h, guiConf);
+			text_viewer, algo, h, guiConf);
 		controller.run();
 	}
 
-	public static void guilessAI(Game server, ResultsWriter text_viewer,
-			AnytimeAlgorithm<BoardState> algo, Heuristic h,
-			GUIConfiguration guiConf) throws IOException {
+	public static void guilessAI(final Game server, final ResultsWriter text_viewer,
+			final AnytimeAlgorithm<BoardState> algo, final Heuristic h,
+			final GUIConfiguration guiConf) throws IOException {
 
 		AIController controller = new AIController(server, text_viewer, algo,
-				h, guiConf.frameSize.width, guiConf.frameSize.height);
+			h, guiConf.frameSize.width, guiConf.frameSize.height);
 		controller.startGame();
 	}
 
-	public static void guiNoAI(Game server, GUIConfiguration guiConf) {
+	public static void guiNoAI(final Game server, final GUIConfiguration guiConf) {
 
 		GUIController controller = new GUIController(server, guiConf);
 		controller.startGame();
