@@ -1,6 +1,8 @@
 package logic;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import utils.GameUtils.Direction;
@@ -8,15 +10,23 @@ import utils.GameUtils.Direction;
 public class Path implements Iterable<Direction> {
 
 	private final ArrayList<Direction> pathTurns;
+	public final ArrayList<Point> pathCoords;
 
-	public Path() {
+	public Path(final Point initial) {
 		pathTurns = new ArrayList<>();
+		pathCoords = new ArrayList<>();
+		pathCoords.add(initial);
 	}
 
 	private void addTurn(final Direction dir){
 		pathTurns.add(dir);
+		Point last = pathCoords.get(pathCoords.size() - 1);
+		pathCoords.add(getNextPoint(last, dir));
 	}
 
+	public Collection<Point> getCoords() {
+		return pathCoords;
+	}
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null || obj.getClass() != Path.class)
@@ -59,12 +69,12 @@ public class Path implements Iterable<Direction> {
 	public static class PathBuilder {
 		private final Path path;
 
-		public PathBuilder() {
-			path = new Path();
+		public PathBuilder(final Point initial) {
+			path = new Path(initial);
 		}
 
 		public PathBuilder dup() {
-			PathBuilder pb = new PathBuilder();
+			PathBuilder pb = new PathBuilder(path.pathCoords.get(0));
 			path.forEach(dir -> pb.addTurn(dir));
 			return pb;
 		}
@@ -83,5 +93,27 @@ public class Path implements Iterable<Direction> {
 		public Path build() {
 			return path;
 		}
+	}
+
+	public static Point getNextPoint(final Point prev, final Direction d) {
+		int newX = prev.x, newY = prev.y;
+		switch (d) {
+		case downward:
+			newY++;
+			break;
+		case upward:
+			newY--;
+			break;
+		case left:
+			newX--;
+			break;
+		case right:
+			newX++;
+			break;
+		case no_direction:
+		default:
+			break;
+		}
+		return new Point(newX, newY);
 	}
 }

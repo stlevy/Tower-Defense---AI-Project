@@ -1,10 +1,13 @@
 package logic;
 
+import static logic.Path.getNextPoint;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
@@ -14,7 +17,6 @@ import java.util.Set;
 import logic.Path.PathBuilder;
 import utils.GameUtils.Direction;
 import utils.GameUtils.TILE_TYPE;
-
 /**
  * a collection of blocks, also iterable over it's blocks (going up to down,
  * left to right)
@@ -30,7 +32,7 @@ public class Room extends Rectangle implements Iterable<Point> {
 	protected final Block[][] blocks;
 	private final int roomWidth;
 	private final int roomHeight;
-	private final Set<Path> paths;
+	public final Collection<Path> paths;
 
 	public Room(final int _roomWidth, final int _roomHeight, final int _blockSize,
 			final Point _basePoint, final File level) {
@@ -44,6 +46,9 @@ public class Room extends Rectangle implements Iterable<Point> {
 		blockSize = _blockSize;
 		entryPoint = loadMap(level);
 		paths = AnalyzePaths();
+		for (Path p : paths)
+			for (Point coord : p.getCoords())
+				getBlock(coord).addPath(p);
 	}
 
 
@@ -83,28 +88,6 @@ public class Room extends Rectangle implements Iterable<Point> {
 		return entryPoint;
 	}
 
-	private static Point getNextPoint(final Point prev, final Direction d) {
-		int newX=prev.x,newY=prev.y;
-		switch (d){
-		case downward:
-			newY++;
-			break;
-		case upward:
-			newY--;
-			break;
-		case left:
-			newX--;
-			break;
-		case right:
-			newX++;
-			break;
-		case no_direction:
-		default:
-			break;
-		}
-		return new Point(newX,newY);
-	}
-
 	/**
 	 * @return all the paths in the map
 	 */
@@ -120,10 +103,10 @@ public class Room extends Rectangle implements Iterable<Point> {
 		HashSet<Path> $ = new HashSet<>();
 		Set<Direction> walkableDirections = getWalkableDirections(prevPoint, currentPoint);
 		if (walkableDirections.isEmpty() && getBlockType(currentPoint) == TILE_TYPE.END)
-			$.add(new Path());
+			$.add(new Path(currentPoint));
 		for (Direction d : walkableDirections)
 			for (Path p : AnalyzePaths_recursive(currentPoint, getNextPoint(currentPoint, d)))
-				$.add(new PathBuilder().addTurn(d).concat(p).build());
+				$.add(new PathBuilder(currentPoint).addTurn(d).concat(p).build());
 		return $;
 	}
 
@@ -232,4 +215,9 @@ public class Room extends Rectangle implements Iterable<Point> {
 		return paths.toArray(new Path[size])[RANDOM.nextInt(size)];
 	}
 
+	public boolean blockOnPath(final Point coord, final Path p) {
+		if (!pointInRoom(coord))
+			return false;
+		return getBlock(coord).isOnPath(p);
+	}
 }
