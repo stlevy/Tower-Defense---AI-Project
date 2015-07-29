@@ -16,26 +16,27 @@ import java.text.DecimalFormat;
 public class ResultsWriter {
 	private static final String SEPERATOR = ",";
 	private final File resultsFile;
-	private BufferedWriter bw;
+	private final BufferedWriter bw;
 	private final DecimalFormat df = new DecimalFormat("#.00");
 	private final int levels;
 	private int sumKilled = 0;
 	private int sumSpawned = 0;
 
-	public ResultsWriter(int levels, long runningTime, int beamWidth)
+	public ResultsWriter(final int levels, final long runningTime, final int beamWidth)
 			throws IOException {
-		this(levels, runningTime, beamWidth, -1.0);
+		this(levels, runningTime, beamWidth, -1.0, -1);
 	}
 
-	public ResultsWriter(int levels, long runningTime, int beamWidth,
-			double alpha) throws IOException {
+	public ResultsWriter(final int levels, final long runningTime, final int beamWidth,
+			final double alpha,
+			final int experiment) throws IOException {
 		this.levels = levels;
 		File resFolder = new File("Results");
 		if (!resFolder.exists())
 			if (!resFolder.mkdir())
 				throw new IllegalStateException("cannot create folder Results");
 
-		resultsFile = new File("Results/results.csv");
+		resultsFile = new File("Results/results3.csv");
 		boolean headerNeeded = ! (resultsFile.exists()) ;
 		FileWriter fw = new FileWriter(resultsFile.getAbsoluteFile(), true);
 		bw = new BufferedWriter(fw);
@@ -45,28 +46,32 @@ public class ResultsWriter {
 		writeCSVvalue("" + runningTime);
 		writeCSVvalue("" + beamWidth);
 		writeCSVvalue("" + df.format(alpha));
+		writeCSVvalue("" + experiment);
+		writeCSVvalue(" ");
 	}
 
-	private void initializeResultsFile(int levels) {
+	private void initializeResultsFile(final int levels) {
 		writeCSVvalue("Running Time");
 		writeCSVvalue("Beam Width");
 		writeCSVvalue("alpha");
+		writeCSVvalue("experiment");
+		writeCSVvalue(" ");
 		for (int i = 1; i <= levels; i++)
 			writeCSVvalue("L-" + i);
 		writeCSVvalue("average score");
 		writeLineFeed();
 	}
 
-	public void initializeLevel(int level) {
+	public void initializeLevel(final int level) {
 		System.out.println("Starting level " + level);
 	}
 
-	public void buyTower(Point roomCoord, int item) {
+	public void buyTower(final Point roomCoord, final int item) {
 
 	}
 
-	public void sumLevel(int level, int money, int health, int killedMobs,
-			int towers, int numberofMobs) {
+	public void sumLevel(final int level, final int money, final int health, final int killedMobs,
+			final int towers, final int numberofMobs) {
 		sumKilled += killedMobs;
 		sumSpawned += numberofMobs;
 		writeCSVvalue(df.format(killedMobs / (float) numberofMobs));
@@ -74,7 +79,7 @@ public class ResultsWriter {
 			System.out.println("level "+level+" score:"+df.format(sumKilled / (float) sumSpawned));
 	}
 
-	private void writeCSVvalue(String s) {
+	private void writeCSVvalue(final String s) {
 		try {
 			bw.write(s + SEPERATOR);
 		} catch (IOException e) {
