@@ -3,12 +3,12 @@ HOW TO RUN THE GAME MANUALLY:
 to run the game:
 
 open a cmd and run
-	java -jar game.jar <Mode> [<t> <w> <alpha>]
+	java -jar game.jar <Mode> [<t> <w> <alpha> <heuristic>]
 
 example :
-	java -jar game.jar gui 1000 100 0.25
+	java -jar game.jar gui 1000 100 0.25 1
 
-in this example, the ai player runs in gui mode, with 1 second to run the algorithm, beam width 100 and alpha=0.25
+in this example, the ai player runs in gui mode, with 1 second to run the algorithm, beam width 100 and alpha=0.25 (with old road feature)
 
 Mode :
 	- "human" - you want to play the game for yourself
@@ -28,13 +28,18 @@ the algorithms has 2 pure heuristics
 		- "Path heuristics" - maximizes the amount of path seen by the towers
 		- "Tower heuristics" - maximizes the "effective levels" of the towers,
 			where "effective level" is the level of the tower that SEES some path.
+
 alpha : if 0<=alpha<=1:
 		the heuristics the game runs is (alpha*PathHeuristics) + ((1-alpha) * TowerHeuristics)
 	
 		if alpha == 2: 
 		the heuristics the game runs is PathHeuristics * TowerHeuristics
 		
-		
+heuristic:
+	1 : heuristic value is : (alpha*OldPathHeuristics) + ((1-alpha) * TowerHeuristics)
+	2 : heuristic value is : (alpha*NewPathHeuristics) + ((1-alpha) * TowerHeuristics)
+	3 : heuristic value is : rectangle heuristics
+	
 there are some python files:
 	* "experimentRunner.py" - a python file for re-running the experiments.
 			you need to uncomment the experiment you want to run.
