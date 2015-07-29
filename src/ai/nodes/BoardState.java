@@ -3,11 +3,12 @@ package ai.nodes;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
+import ai.heuristics.Heuristic;
 import logic.Game;
 import utils.GameUtils.TILE_TYPE;
-import ai.heuristics.Heuristic;
 
 public class BoardState extends AbstractState {
 
@@ -16,20 +17,26 @@ public class BoardState extends AbstractState {
 	/**
 	 * this constructor is only used once, to create the root node.
 	 */
-	public BoardState(int availableTowers, Heuristic h, Game game) {
+	public BoardState(final int availableTowers, final Heuristic h, final Game game) {
 		super(h, game);
 		towerCoordinates = new ArrayList<>();
-		for (Point p : game) {
+		ArrayList<Point> allCoordinates = new ArrayList<>();
+		for (Point p : game)
 			if (game.towerSeesPath(p)
 					&& game.getBlockType(p) == TILE_TYPE.GROUND
 					&& !game.hasTower(p))
-				towerCoordinates.add(p);
-			if (towerCoordinates.size() == availableTowers)
-				break;
-		}
+				allCoordinates.add(p);
+		Random rnd = new Random(System.currentTimeMillis());
+		for (int i = 0; i < availableTowers; i++)
+			towerCoordinates.add(allCoordinates.remove(rnd.nextInt(allCoordinates.size())));
+
 	}
-	
-	private BoardState(BoardState board) {
+
+	public static BoardState randomRestart(final int availableTowers, final Heuristic h, final Game game) {
+		return new BoardState(availableTowers, h, game);
+	}
+
+	private BoardState(final BoardState board) {
 		super(board.h, board.game);
 		towerCoordinates = new ArrayList<>(board.getTowerCoordinates());
 	}
@@ -64,12 +71,12 @@ public class BoardState extends AbstractState {
 		return res + "]";
 	}
 
-	private String pointToString(Point p) {
+	private String pointToString(final Point p) {
 		return "(" + p.x + "," + p.y + ")";
 	}
 
 	@Override
-	public boolean equals(Object other) {
+	public boolean equals(final Object other) {
 		if (other == null)
 			return false;
 		if (this == other)

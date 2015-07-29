@@ -102,4 +102,3 @@ for n in range(1,21):
 	out.write(("%d"+seperator) %(angles,))
 	out.write(("%.2f\n") %(float(angles)/length,)) 
 	level.close()
-

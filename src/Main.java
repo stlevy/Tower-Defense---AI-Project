@@ -4,6 +4,8 @@ import ai.algorithms.AnytimeAlgorithm;
 import ai.algorithms.BeamSearchPrioriryQueue;
 import ai.heuristics.Heuristic;
 import ai.heuristics.LevelsHeuristic;
+import ai.heuristics.NewPathHeuristic;
+import ai.heuristics.NewProductHeuristics;
 import ai.heuristics.PathHeuristic;
 import ai.heuristics.ProductHeuristic;
 import ai.heuristics.WeightedHeuristics;
@@ -37,23 +39,19 @@ public class Main {
 		int runningTime = Integer.parseInt(args[1]);
 		int beamSize = Integer.parseInt(args[2]);
 		double alpha = Double.parseDouble(args[3]);
+		int experiment = Integer.parseInt(args[4]);
+
 		// AI algorithm
 		BeamSearchPrioriryQueue<BoardState> algo = new BeamSearchPrioriryQueue<>(
 				beamSize, runningTime);
 
-		// Heuristic function
-		Heuristic bonus = new LevelsHeuristic();
-		Heuristic path = new PathHeuristic();
-		Heuristic h;
-		if ( alpha != 2)
-			h = new WeightedHeuristics(server, path, bonus, alpha);
-		else
-			h = new ProductHeuristic(server, path, bonus); 
+		Heuristic h = getHeuristic(server, alpha, experiment);
 
 		// Results Writer
 		ResultsWriter text_viewer = new ResultsWriter(
 			server.getConfiguration().numberOfLevels, runningTime,
-			beamSize, alpha);
+			beamSize,
+			alpha, experiment);
 
 		//AI + GUI
 		if (args[0].equals("gui")) {
@@ -66,6 +64,21 @@ public class Main {
 			return;
 		}
 		throw new IllegalArgumentException("args[0] was not a valid argument");
+	}
+
+	private static Heuristic getHeuristic(final Game server, final double alpha, final int experiment) {
+		// Heuristic function
+		switch (experiment) {
+		case 1:
+			return new WeightedHeuristics(server, new PathHeuristic(), new LevelsHeuristic(), alpha);
+		case 2:
+			return new WeightedHeuristics(server, new NewPathHeuristic(), new LevelsHeuristic(), alpha);
+		case 3:
+			return new ProductHeuristic(server, new NewProductHeuristics(), new LevelsHeuristic());
+		default:
+			break;
+		}
+		return null;
 	}
 
 	private static int getSpeedFactor(final String mode) {
